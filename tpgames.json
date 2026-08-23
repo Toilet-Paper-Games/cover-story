@@ -1,0 +1,32 @@
+{
+  "game": {
+    "id": "cover-story",
+    "version": "0.1.0",
+    "title": "Cover Story"
+  },
+  "bundle": {
+    "manifest": "bundle/manifest.template.json",
+    "output": "dist",
+    "clean": true,
+    "copies": [
+      {
+        "from": "build/surfaces",
+        "to": "."
+      },
+      {
+        "from": "surfaces/host.html",
+        "to": "host.html",
+        "replacements": {
+          "src=\"../src/host.ts\"": "src=\"./host.js\""
+        }
+      },
+      {
+        "from": "surfaces/controller.html",
+        "to": "controller.html",
+        "replacements": {
+          "src=\"../src/controller.ts\"": "src=\"./controller.js\""
+        }
+      }
+    ]
+  }
+}
