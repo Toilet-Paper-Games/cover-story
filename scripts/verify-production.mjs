@@ -1,7 +1,7 @@
 import { chromium } from "@playwright/test";
 
 const productionUrl = process.env.TPG_PRODUCTION_URL ?? "https://play.tp.games/";
-const expectedVersion = process.env.TPG_EXPECTED_VERSION ?? "0.1.5";
+const expectedVersion = process.env.TPG_EXPECTED_VERSION ?? "0.1.6";
 const focusableSelector =
   'button,a[href],input,select,textarea,summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"]),audio[controls],video[controls]';
 
@@ -23,7 +23,9 @@ try {
   const controllers = [];
   for (let index = 0; index < 3; index += 1) {
     const context = await browser.newContext({
-      viewport: { width: index === 0 ? 360 : 430, height: index === 0 ? 740 : 860 }
+      viewport: { width: index === 0 ? 360 : 430, height: index === 0 ? 740 : 860 },
+      hasTouch: true,
+      isMobile: true
     });
     contexts.push(context);
     const page = await context.newPage();
@@ -77,7 +79,7 @@ try {
   }
 
   for (const frame of controllerFrames) {
-    await frame.getByRole("button", { name: "I’m ready" }).click();
+    await frame.getByRole("button", { name: "I’m ready" }).tap();
   }
 
   const covers = [
@@ -90,7 +92,8 @@ try {
     const textbox = frame.getByRole("textbox", { name: "Your one-sentence cover" });
     await textbox.waitFor({ timeout: 25_000 });
     await textbox.fill(covers[index]);
-    await frame.getByRole("button", { name: "Lock in my cover" }).click();
+    const submitCover = frame.getByRole("button", { name: "Lock in my cover" });
+    await submitCover.press("Enter");
     try {
       await frame.getByRole("heading", { name: "Cover locked in" }).waitFor({ timeout: 10_000 });
     } catch {
@@ -106,9 +109,9 @@ try {
   for (const frame of controllerFrames) {
     await frame.getByRole("heading", { name: "What motivated this cover?" }).waitFor();
     await frame.getByRole("radio").first().check();
-    await frame.getByRole("button", { name: "Continue to favorite" }).click();
+    await frame.getByRole("button", { name: "Continue to favorite" }).press("Enter");
     await frame.getByRole("radio").first().check();
-    await frame.getByRole("button", { name: "Submit my ballot" }).click();
+    await frame.getByRole("button", { name: "Submit my ballot" }).press("Enter");
   }
 
   await hostFrame.getByRole("heading", { name: "The truth comes out" }).waitFor({ timeout: 20_000 });

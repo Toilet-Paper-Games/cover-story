@@ -80,9 +80,16 @@ export class TpgRuntimeAdapter implements RuntimePort {
   }
 
   async writeOwnPlayerState(value: PlayerIntentState, expectedRevision: number) {
-    return mapMutation(
-      await this.api.setPlayerState(value, undefined, { expectedRevision })
-    );
+    const confirmedRevision = this.api.getPlayerStateSnapshot()?.revision ?? expectedRevision;
+    const result = await this.api.setPlayerState(value, undefined, {
+      expectedRevision: confirmedRevision
+    });
+    if (result.status === "rejected" && result.reason === "stale-revision") {
+      return mapMutation(
+        await this.api.setPlayerState(value, undefined, { expectedRevision: result.revision })
+      );
+    }
+    return mapMutation(result);
   }
 
   subscribeSharedState(listener: Parameters<RuntimePort["subscribeSharedState"]>[0]) {
