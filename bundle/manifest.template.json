@@ -1,7 +1,7 @@
 {
   "manifestVersion": "1",
   "gameId": "cover-story",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "sdkVersion": "1.0.0",
   "title": "Cover Story",
   "description": "Explain an impossible public incident, decode the private motives behind suspicious alibis, and crown the room's favorite cover story.",
@@ -48,7 +48,7 @@
   },
   "presentationMetadata": {
     "shortDescription": "Write a suspicious alibi, decode hidden motives, and crown the room's favorite cover story.",
-    "longDescription": "An impossible incident just made the yearbook. Every player gets a secret motive and writes an anonymous one-sentence cover story. Decode a classmate's motive, vote for the best excuse, and score for favorite covers, correct deductions, and lies that get successfully decoded. Three quick rounds end with permanent-record superlatives.",
+    "longDescription": "An impossible incident just crashed into a live comic broadcast. Every player gets a secret motive and writes an anonymous one-sentence cover story. Decode another player's motive, crown the best excuse, and score for favorite covers, correct deductions, and lies that get successfully decoded. Three fast cases end with a winner reveal and ridiculous superlatives.",
     "cardTitle": "Cover Story",
     "tags": [
       "party",
@@ -57,10 +57,10 @@
       "controller-only"
     ],
     "artwork": {
-      "thumbnail": "/assets/thumbnail.png",
-      "card": "/assets/card.png"
+      "thumbnail": "/assets/thumbnail-v2.png",
+      "card": "/assets/card-v2.png"
     },
-    "launchColor": "#2146c7",
+    "launchColor": "#07122f",
     "estimatedDurationMinutes": 10
   },
   "sessionTopology": {

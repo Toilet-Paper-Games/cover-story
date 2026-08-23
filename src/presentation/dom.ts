@@ -8,7 +8,7 @@ export function statusStrip(view: PublicViewModel): string {
   const disconnected = view.players.filter((player) => !player.connected).length;
   return `<div class="status-strip" aria-label="Room status">
     <span>${html(view.roundLabel)}</span>
-    ${view.phase === "lobby" ? "" : `<span>${view.players.length} classmate${view.players.length === 1 ? "" : "s"}</span>`}
+    ${view.phase === "lobby" ? "" : `<span>${view.players.length} player${view.players.length === 1 ? "" : "s"}</span>`}
     ${disconnected ? `<span>${disconnected} reconnecting</span>` : ""}
   </div>`;
 }
@@ -17,8 +17,9 @@ export function scoreRows(rows: ScoreRow[], compact = false): string {
   return `<ol class="scoreboard${compact ? " scoreboard--compact" : ""}">
     ${rows
       .map(
-        (row) => `<li class="score-row">
+        (row) => `<li class="score-row" style="--rank:${row.rank};--score:${Math.max(0, row.score)}">
           <span class="rank">${row.rank}</span>
+          <span class="score-avatar" aria-hidden="true">${html(row.name.slice(0, 1).toUpperCase())}</span>
           <span class="score-name">${html(row.name)}${row.connected ? "" : " · reconnecting"}</span>
           <strong>${row.score}</strong>
         </li>`
@@ -36,7 +37,7 @@ export function progressDots(view: PublicViewModel): string {
       `<span class="progress-dot${index < view.submittedCount ? " is-filled" : ""}"></span>`
     ).join("")}</div>
     <div class="progress-track" aria-hidden="true"><span style="width:${percentage}%"></span></div>
-    <p>${view.submittedCount === view.expectedCount ? "Everybody’s in!" : "Waiting on the rest of the class…"}</p>
+    <p>${view.submittedCount === view.expectedCount ? "Everybody’s locked in!" : "The studio is waiting…"}</p>
   </div>`;
 }
 

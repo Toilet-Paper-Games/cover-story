@@ -21,7 +21,7 @@ The current public SDK ownership boundary prevents another controller from writi
 
 ## Experience
 
-The game should be explainable from the first screen, finish three rounds in roughly 8–10 minutes, and create two laughs per answer: first from the anonymous cover, then from the motive reveal.
+The game should feel like a live comic-book cover-up broadcast, explain itself from the first screen, finish three rounds in roughly 8–10 minutes, and create two laughs per answer: first from the anonymous cover, then from the motive reveal. The room sees a distinct television-scale game beat at every phase while each phone behaves like a personal contestant game pad.
 
 ## Accessibility
 

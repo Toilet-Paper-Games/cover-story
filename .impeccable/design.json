@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-23T00:00:00.000Z",
+  "title": "Design System: Cover Story",
+  "extensions": {
+    "colorMeta": {
+      "midnight-stage": { "role": "neutral", "displayName": "Midnight Stage", "canonical": "#07122f", "tonalRamp": ["#020716", "#07122f", "#10265b", "#29417a", "#55679a", "#8895bb", "#c1c8db", "#f1f3f8"] },
+      "midnight-console": { "role": "neutral", "displayName": "Midnight Console", "canonical": "#0c1e4c", "tonalRamp": ["#040a1c", "#0c1e4c", "#17366f", "#36558e", "#687cab", "#99a5c7", "#c9cee0", "#f2f3f8"] },
+      "outline-ink": { "role": "neutral", "displayName": "Outline Ink", "canonical": "#030711", "tonalRamp": ["#010205", "#030711", "#17202f", "#3b4554", "#6a7380", "#9ca3ad", "#cfd3d8", "#f5f6f7"] },
+      "warm-paper": { "role": "neutral", "displayName": "Warm Paper", "canonical": "#fff6df", "tonalRamp": ["#2b2416", "#51442b", "#796b4c", "#a29470", "#c8bc98", "#e5d9b8", "#f5e9cc", "#fff6df"] },
+      "dim-paper": { "role": "neutral", "displayName": "Dim Paper", "canonical": "#d9d9e9", "tonalRamp": ["#20202d", "#3f3f50", "#626276", "#86869b", "#aaaabd", "#c5c5d7", "#d9d9e9", "#f5f5fa"] },
+      "evidence-lime": { "role": "primary", "displayName": "Evidence Lime", "canonical": "#c9f227", "tonalRamp": ["#1d2604", "#384b08", "#59730d", "#7d9e13", "#9fc71a", "#bce620", "#d7f66a", "#effbc2"] },
+      "alarm-coral": { "role": "secondary", "displayName": "Alarm Coral", "canonical": "#ff5349", "tonalRamp": ["#300705", "#64100c", "#9a1d17", "#cc3129", "#ff5349", "#ff827b", "#ffb7b3", "#ffe8e6"] },
+      "trophy-yellow": { "role": "tertiary", "displayName": "Trophy Yellow", "canonical": "#ffd43d", "tonalRamp": ["#2b2000", "#5b4500", "#8b6c00", "#bc9600", "#e9bc18", "#ffd43d", "#ffe98b", "#fff8d2"] },
+      "signal-purple": { "role": "tertiary", "displayName": "Signal Purple", "canonical": "#8c7dff", "tonalRamp": ["#10082f", "#25145f", "#3d298e", "#5946bd", "#7768e4", "#9b8eff", "#c7beff", "#eeeaff"] },
+      "broadcast-blue": { "role": "secondary", "displayName": "Broadcast Blue", "canonical": "#2353c7", "tonalRamp": ["#03102d", "#09235b", "#12398a", "#2353c7", "#4d75dc", "#7e9aeb", "#b6c6f4", "#e8edfc"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Broadcast Display", "purpose": "Television-scale incident, result, and finale declarations." },
+      "headline": { "displayName": "Game Headline", "purpose": "Controller phases, motives, labels, and scores." },
+      "body": { "displayName": "Play Copy", "purpose": "Fast-reading prompts, choices, receipts, and instructions." },
+      "label": { "displayName": "Broadcast Label", "purpose": "Ribbons, metadata, status, authority, and progress." }
+    },
+    "shadows": [
+      { "name": "panel-offset", "value": "7px 8px 0 #8c7dff", "purpose": "Hard supporting depth beneath paper panels." },
+      { "name": "hero-slam", "value": "15px 17px 0 #ff5349, 25px 30px 34px rgba(0,0,0,.56)", "purpose": "Single dominant incident or result prop." },
+      { "name": "controller-press", "value": "7px 8px 0 #030711, 11px 13px 18px rgba(0,0,0,.32)", "purpose": "Tactile default depth for controller actions." }
+    ],
+    "motion": [
+      { "name": "snap", "value": "120ms cubic-bezier(0.2, 0, 0, 1)", "purpose": "Button presses and choice feedback." },
+      { "name": "prop-arrival", "value": "420ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Tokens, progress hardware, and receipt stamps." },
+      { "name": "hero-arrival", "value": "620ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Evidence wheel and winner burst entrances; raster backgrounds remain static." }
+    ],
+    "breakpoints": [
+      { "name": "public-stack", "value": "920px" },
+      { "name": "short-host", "value": "760px height" },
+      { "name": "compact-controller", "value": "380px width / 680px height" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Controller Action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The current phase action; its fill follows the writing, voting, or finale phase color.",
+      "html": "<button class=\"ds-primary-action\">LOCK IN MY COVER</button>",
+      "css": ".ds-primary-action{width:100%;min-height:58px;padding:13px 18px;color:#030711;background:#c9f227;border:4px solid #030711;border-radius:0;box-shadow:7px 8px 0 #030711,11px 13px 18px rgba(0,0,0,.32);font:900 19px/1 Impact,Haettenschweiler,sans-serif;letter-spacing:.025em;text-transform:uppercase;cursor:pointer;transition:transform 120ms cubic-bezier(.2,0,0,1),box-shadow 120ms cubic-bezier(.2,0,0,1)}.ds-primary-action:hover{transform:translateY(-2px)}.ds-primary-action:active{transform:scale(.96) translate(4px,4px);box-shadow:2px 3px 0 #030711}.ds-primary-action:focus-visible{outline:3px solid #fff6df;outline-offset:4px;box-shadow:0 0 0 7px #ffd43d}"
+    },
+    {
+      "name": "Secondary Controller Action",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Recessed authority and navigation action on a controller only.",
+      "html": "<button class=\"ds-secondary-action\">ROOM SETTINGS</button>",
+      "css": ".ds-secondary-action{width:100%;min-height:58px;padding:13px 18px;color:#fff6df;background:#0c1e4c;border:4px solid #fff6df;border-radius:0;box-shadow:7px 8px 0 #030711;font:900 19px/1 Impact,Haettenschweiler,sans-serif;text-transform:uppercase;cursor:pointer}.ds-secondary-action:hover{background:#2353c7}.ds-secondary-action:active{transform:scale(.96) translate(4px,4px);box-shadow:2px 3px 0 #030711}.ds-secondary-action:focus-visible{outline:3px solid #fff6df;outline-offset:4px;box-shadow:0 0 0 7px #ffd43d}"
+    },
+    {
+      "name": "Cover Input",
+      "kind": "input",
+      "description": "Warm-paper writing field with a heavy comic outline and visible purple depth.",
+      "html": "<textarea class=\"ds-cover-input\" placeholder=\"Type your suspicious explanation…\"></textarea>",
+      "css": ".ds-cover-input{width:100%;min-height:128px;padding:16px;color:#030711;background:#fff6df;border:4px solid #030711;border-radius:0;box-shadow:inset 0 0 0 4px rgba(140,125,255,.18),7px 8px 0 #8c7dff;font:700 16px/1.45 Arial,Helvetica,sans-serif}.ds-cover-input:hover{box-shadow:inset 0 0 0 4px rgba(140,125,255,.28),7px 8px 0 #8c7dff}.ds-cover-input:focus-visible{outline:3px solid #fff6df;outline-offset:4px;box-shadow:0 0 0 7px #ffd43d}"
+    },
+    {
+      "name": "Voting Choice",
+      "kind": "custom",
+      "description": "A full-row native radio choice that becomes a coral evidence panel when selected.",
+      "html": "<label class=\"ds-choice\"><input type=\"radio\" name=\"choice\"><span class=\"ds-choice-marker\"></span><span>They needed a distraction</span></label>",
+      "css": ".ds-choice{position:relative;min-height:62px;display:grid;grid-template-columns:26px 1fr;align-items:center;gap:12px;padding:13px 14px;color:#030711;background:#fff6df;border:4px solid #030711;box-shadow:5px 6px 0 #8c7dff;font:900 15px/1.3 Arial,Helvetica,sans-serif;cursor:pointer}.ds-choice input{position:absolute;left:14px;width:26px;height:26px;opacity:0}.ds-choice-marker{width:26px;height:26px;border:4px solid #030711;border-radius:50%;background:#fff6df}.ds-choice:hover{transform:translateY(-2px);box-shadow:5px 8px 0 #8c7dff}.ds-choice:has(input:checked){background:#ff5349;box-shadow:7px 8px 0 #c9f227;transform:rotate(-.5deg) translateY(-2px)}.ds-choice:has(input:focus-visible){outline:3px solid #fff6df;outline-offset:4px;box-shadow:0 0 0 7px #ffd43d}"
+    },
+    {
+      "name": "Secret Motive Ticket",
+      "kind": "card",
+      "refersTo": "secret-ticket",
+      "description": "Private controller-only evidence with a clipped paper silhouette and coral SECRET stamp.",
+      "html": "<section class=\"ds-secret\"><span>YOUR SECRET MOTIVE</span><strong>IMPRESS THE MAYOR</strong><small>Hide this inside a suspicious explanation.</small></section>",
+      "css": ".ds-secret{position:relative;padding:19px;color:#030711;background:#c9f227;border:4px solid #030711;box-shadow:8px 9px 0 #ff5349,13px 15px 20px rgba(0,0,0,.36);clip-path:polygon(0 6%,96% 0,100% 93%,5% 100%);transform:rotate(-1deg);font-family:Arial,Helvetica,sans-serif}.ds-secret span{font-size:10px;font-weight:900;letter-spacing:.09em}.ds-secret strong{display:block;margin-top:8px;font:900 28px/1.05 Impact,Haettenschweiler,sans-serif}.ds-secret small{display:block;margin-top:12px;font-weight:800}.ds-secret:hover{transform:rotate(0) translateY(-2px)}"
+    },
+    {
+      "name": "Answer Panel",
+      "kind": "card",
+      "refersTo": "answer-panel",
+      "description": "A revealed alibi panel; the lead variant switches to evidence lime and a coral hero offset.",
+      "html": "<article class=\"ds-answer\"><b>CROWD FAVORITE</b><p>The moon was in a witness protection program.</p><small>2 VOTES · 200 PTS</small></article>",
+      "css": ".ds-answer{padding:18px;color:#030711;background:#c9f227;border:4px solid #030711;box-shadow:11px 13px 0 #ff5349,18px 22px 30px rgba(0,0,0,.48);font-family:Arial,Helvetica,sans-serif}.ds-answer b{display:inline-block;padding:6px 8px;color:#fff6df;background:#ff5349;border:3px solid #030711;font:900 12px/1 Impact,sans-serif}.ds-answer p{font:900 28px/1.05 Impact,sans-serif;text-transform:uppercase}.ds-answer small{font-weight:900}.ds-answer:hover{transform:translateY(-2px)}"
+    },
+    {
+      "name": "Score Race Row",
+      "kind": "custom",
+      "description": "Rank, contestant token, name, race bar, and score remain visible together.",
+      "html": "<div class=\"ds-score\"><b>1</b><span class=\"ds-avatar\">M</span><strong>MARA</strong><i></i><em>1,200</em></div>",
+      "css": ".ds-score{display:grid;grid-template-columns:28px 34px minmax(0,1fr) 90px auto;align-items:center;gap:8px;min-height:50px;padding:7px 9px;color:#fff6df;background:#030711;border:3px solid #fff6df;box-shadow:4px 5px 0 #2353c7;font:900 14px/1 Arial,Helvetica,sans-serif}.ds-score b{color:#ff5349;font:900 22px/1 Impact,sans-serif}.ds-avatar{width:30px;height:30px;display:grid;place-items:center;color:#030711;background:#ffd43d;border:2px solid #030711;border-radius:50%}.ds-score i{height:9px;background:linear-gradient(90deg,#c9f227 70%,#0c1e4c 70%)}.ds-score em{color:#ffd43d;font:900 18px/1 Impact,sans-serif;font-style:normal}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Live Comic Cover-Up",
+    "overview": "Cover Story is a televised comic-book emergency, not a document, dashboard, or conventional website. Impossible incidents crash onto a midnight broadcast stage as oversized evidence. The room sees wheels, bursts, smashed panels, score races, and stamped verdicts; each phone becomes a tactile contestant game pad for secret motives, suspicious alibis, deductions, and votes. The visual world is loud but disciplined. Warm paper panels and heavy black outlines carry readable game information while acid lime, alarm coral, trophy yellow, and signal purple create unmistakable phase beats. Generated raster artwork supplies the logo, catalog art, and distressed halftone stage material; CSS geometry supplies scalable wheels, bursts, tokens, and panels. Public surfaces remain cinematic and passive at all times.",
+    "keyCharacteristics": [
+      "A midnight comic-broadcast stage with real distressed raster texture.",
+      "Impact-led, all-caps declarations sized for a television across the room.",
+      "One dominant game prop per phase: evidence wheel, incident card, answer wall, score race, or winner burst.",
+      "Hard black outlines, offset color shadows, clipped tickets, circles, and starbursts instead of rounded application cards.",
+      "Controllers styled as personal game pads with strong phase colors and tactile press states.",
+      "Private motives and every action stay on controllers; host and spectator are view-only broadcasts."
+    ],
+    "rules": [
+      { "name": "The Stage-Dominance Rule", "body": "Midnight remains the largest color field. Bright inks arrive as props and state signals, never as soft background decoration.", "section": "colors" },
+      { "name": "The Four-Ink Rule", "body": "Lime means evidence or progress, coral means urgency or voting, yellow means authority or victory, and purple means supporting depth. State must also remain legible through text, shape, or position.", "section": "colors" },
+      { "name": "The Broadcast-Scale Rule", "body": "Public jokes and verdicts must read from across a room. If a heading could pass for normal webpage type, it is too small.", "section": "typography" },
+      { "name": "The One-Shout Rule", "body": "Each state gets one dominant declaration. Supporting labels stay compact so the hierarchy does not become a wall of shouting.", "section": "typography" },
+      { "name": "The One-Prop Rule", "body": "Every public phase needs one unmistakable silhouette that communicates the current game beat before its copy is read.", "section": "layout" },
+      { "name": "The Hard-Shadow Rule", "body": "Color offsets provide structure. Blur is reserved for the single deep shadow beneath a hero prop, never for ordinary cards.", "section": "elevation" },
+      { "name": "The Silhouette Rule", "body": "Geometry must communicate purpose: panels contain evidence, circles track players or progress, and starbursts celebrate locked or winning states.", "section": "shapes" }
+    ],
+    "dos": [
+      "Do make every phase look like a new shot in the same live comic broadcast.",
+      "Do preserve one dominant public game prop and one dominant declaration per state.",
+      "Do use the generated logo, catalog art, and distressed stage texture as production assets rather than recreating them with placeholder gradients.",
+      "Do keep all writing, voting, settings, and room direction on controllers.",
+      "Do render confirmed runtime echoes and preserve controller drafts, focus, selection, and checked choices across subscriptions.",
+      "Do verify 1280×720 hosts, tablet spectators, 360×640 phones, and 320×568 compact controllers.",
+      "Do keep public surfaces at zero interactive or focusable elements in every phase."
+    ],
+    "donts": [
+      "Don't fall back to a centered website hero, generic dashboard grid, pill-heavy UI, soft cards, glass, or decorative gradients.",
+      "Don't use bright palette colors interchangeably; preserve their game-state roles.",
+      "Don't shrink public reveals into ordinary headings or flatten the lead answer into an equal card grid.",
+      "Don't expose private motives or ballots through host or spectator presentation.",
+      "Don't require motion to understand state or ignore prefers-reduced-motion.",
+      "Don't add organizer actions to a non-authority controller or any action to the host display."
+    ]
+  }
+}

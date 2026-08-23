@@ -1,200 +1,205 @@
 ---
 name: Cover Story
-description: A late-1990s yearbook for impossible incidents, shared publicly and annotated privately on phones.
+description: A live comic cover-up broadcast where phones become contestant game pads.
 colors:
-  cool-paper: "#f5f1e8"
-  yearbook-ink: "#15161a"
-  cobalt-school-ink: "#2146c7"
-  correction-red: "#bd2028"
-  deep-correction-red: "#8b1717"
-  trophy-yellow: "#f3c623"
-  rule-line: "#c9c2b4"
-  card-white: "#ffffff"
-  error-paper: "#fff1ef"
-  muted-ink: "#57554f"
+  midnight-stage: "#07122f"
+  midnight-console: "#0c1e4c"
+  outline-ink: "#030711"
+  warm-paper: "#fff6df"
+  dim-paper: "#d9d9e9"
+  evidence-lime: "#c9f227"
+  alarm-coral: "#ff5349"
+  trophy-yellow: "#ffd43d"
+  signal-purple: "#8c7dff"
+  broadcast-blue: "#2353c7"
+  error-coral: "#ff7770"
 typography:
   display:
-    fontFamily: "Georgia, 'Times New Roman', serif"
-    fontSize: "clamp(48px, 7vw, 118px)"
-    fontWeight: 700
-    lineHeight: 0.93
-    letterSpacing: "-0.045em"
-  controller-heading:
-    fontFamily: "Georgia, 'Times New Roman', serif"
-    fontSize: "clamp(38px, 11vw, 68px)"
-    fontWeight: 700
-    lineHeight: 0.98
-    letterSpacing: "-0.045em"
+    fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"
+    fontSize: "clamp(42px, 12vw, 118px)"
+    fontWeight: 900
+    lineHeight: 0.9
+    letterSpacing: "-0.025em"
+  headline:
+    fontFamily: "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif"
+    fontSize: "clamp(36px, 6vw, 84px)"
+    fontWeight: 900
+    lineHeight: 0.92
+    letterSpacing: "-0.025em"
   body:
-    fontFamily: "'Trebuchet MS', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "16px"
+    fontWeight: 700
+    lineHeight: 1.4
   label:
-    fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "12px"
-    fontWeight: 800
-    letterSpacing: "0.12em"
+    fontFamily: "Arial, Helvetica, sans-serif"
+    fontSize: "10px"
+    fontWeight: 900
+    lineHeight: 1
+    letterSpacing: "0.08em"
 rounded:
   square: "0"
-  seal: "50%"
+  token: "50%"
+spacing:
+  xs: "8px"
+  sm: "12px"
+  md: "18px"
+  lg: "24px"
+  xl: "36px"
 components:
   button-primary:
-    backgroundColor: "{colors.cobalt-school-ink}"
-    textColor: "{colors.card-white}"
+    backgroundColor: "{colors.evidence-lime}"
+    textColor: "{colors.outline-ink}"
+    typography: "{typography.headline}"
     rounded: "{rounded.square}"
-    padding: "12px 18px"
-    height: "54px"
+    padding: "13px 18px"
+    height: "58px"
   button-secondary:
-    backgroundColor: "{colors.cool-paper}"
-    textColor: "{colors.yearbook-ink}"
+    backgroundColor: "{colors.midnight-console}"
+    textColor: "{colors.warm-paper}"
     rounded: "{rounded.square}"
-    padding: "12px 18px"
-    height: "54px"
-  answer-card:
-    backgroundColor: "{colors.card-white}"
-    textColor: "{colors.yearbook-ink}"
-    rounded: "{rounded.square}"
-    padding: "clamp(10px, 1vw, 14px)"
-  motive-card:
-    backgroundColor: "{colors.cobalt-school-ink}"
-    textColor: "{colors.card-white}"
+    padding: "13px 18px"
+    height: "58px"
+  answer-panel:
+    backgroundColor: "{colors.warm-paper}"
+    textColor: "{colors.outline-ink}"
     rounded: "{rounded.square}"
     padding: "18px"
+  secret-ticket:
+    backgroundColor: "{colors.evidence-lime}"
+    textColor: "{colors.outline-ink}"
+    rounded: "{rounded.square}"
+    padding: "19px"
 ---
 
 # Design System: Cover Story
 
 ## Overview
 
-**Creative North Star: "The Impossible Yearbook"**
+**Creative North Star: "The Live Comic Cover-Up"**
 
-Cover Story looks like an unofficial late-1990s school yearbook that has been turned into a live comedy game show documenting events that could not have happened. Cool paper, editorial grids, bold Georgia headlines, cobalt school ink, correction-red annotations, trophy-yellow seals, slightly crooked artifacts, and portrait collage artwork make every phase feel like another spread in the same permanent record. Oversized background verdicts, slap-on callouts, score bursts, staged answer cards, and restrained celebration motion give each phase a distinct broadcast beat without copying another party game’s trade dress.
+Cover Story is a televised comic-book emergency, not a document, dashboard, or conventional website. Impossible incidents crash onto a midnight broadcast stage as oversized evidence. The room sees wheels, bursts, smashed panels, score races, and stamped verdicts; each phone becomes a tactile contestant game pad for secret motives, suspicious alibis, deductions, and votes.
 
-The public experience is theatrical and readable from across a room; the controller is a narrow personal page for private motives and decisions. Disclosure is staged by role: incidents and progress are public, motives and ballots stay in normal controller UI until the reveal, and the host never becomes an input surface.
+The visual world is loud but disciplined. Warm paper panels and heavy black outlines carry readable game information while acid lime, alarm coral, trophy yellow, and signal purple create unmistakable phase beats. Generated raster artwork supplies the logo, catalog art, and distressed halftone stage material; CSS geometry supplies scalable wheels, bursts, tokens, and panels. Public surfaces remain cinematic and passive at all times.
 
 **Key Characteristics:**
 
-- Editorial yearbook spreads instead of generic application panels.
-- High-contrast paper, ink, and primary-school color blocks with no gradients.
-- Square, tactile controls and hard offset shadows rather than soft floating surfaces.
-- Georgia-led comedy headlines paired with compact system-sans labels and metadata.
-- Deterministic, phase-specific views for host, controller, and spectator roles.
-- One authored reveal moment per major phase, with equivalent static hierarchy under reduced motion.
-
-Shipped reference captures:
-
-- [Host lobby](docs/screenshots/host-lobby.png)
-- [Host incident reveal](docs/screenshots/host-round-intro.png)
-- [Host results](docs/screenshots/host-results.png)
-- [Controller writing](docs/screenshots/controller-writing.png)
-- [Controller voting](docs/screenshots/controller-voting.png)
+- A midnight comic-broadcast stage with real distressed raster texture.
+- Impact-led, all-caps declarations sized for a television across the room.
+- One dominant game prop per phase: evidence wheel, incident card, answer wall, score race, or winner burst.
+- Hard black outlines, offset color shadows, clipped tickets, circles, and starbursts instead of rounded application cards.
+- Controllers styled as personal game pads with strong phase colors and tactile press states.
+- Private motives and every action stay on controllers; host and spectator are view-only broadcasts.
 
 ## Colors
 
-The palette treats color as yearbook production ink: sparse, flat, semantic, and always supported by text or shape.
+The palette is four-color comic printing under stage light: a dark field, warm readable paper, and rare saturated inks assigned to game meaning.
 
-- **Cool Paper** (`#f5f1e8`): default canvas on every surface.
-- **Yearbook Ink** (`#15161a`): primary text, rules, borders, and structural outlines.
-- **Cobalt School Ink** (`#2146c7`): primary actions, scores, private motive cards, progress, and brand marks.
-- **Correction Red** (`#bd2028`): eyebrows, motives at reveal, countdowns, ranks, and large editorial annotation.
-- **Deep Correction Red** (`#8b1717`): small red text on yellow and error copy where the brighter red would miss normal-text contrast.
-- **Trophy Yellow** (`#f3c623`): authority badges, focus halos, seals, and celebratory offset depth.
-- **Rule Line** (`#c9c2b4`): quiet dividers and secondary hard shadows.
-- **Card White** (`#ffffff`): answer sheets, quotes, text fields, and personal-result inserts.
-- **Error Paper** (`#fff1ef`) and **Muted Ink** (`#57554f`): restricted support tones for recoverable errors and secondary controller guidance.
+- **Midnight Stage:** the full-viewport broadcast field and dominant negative space.
+- **Midnight Console:** secondary controller actions and recessed control surfaces.
+- **Outline Ink:** borders, hard shadows, text on bright panels, and the outer television frame.
+- **Warm Paper:** answer panels, incident evidence, input fields, and high-contrast public copy.
+- **Dim Paper:** secondary instructions and passive footer copy on the dark stage.
+- **Evidence Lime:** writing, evidence, accepted state, leading answers, and the primary controller action during cover creation.
+- **Alarm Coral:** urgency, voting, annotations, ranks, phase shocks, and offset depth.
+- **Trophy Yellow:** authority, awards, finale emphasis, and focus halos.
+- **Signal Purple:** supporting answer depth and secondary panel offsets.
+- **Broadcast Blue:** wheel structure, scoreboard depth, and supporting broadcast accents.
+- **Error Coral:** recoverable controller errors only.
 
-**The Paper-First Rule.** Cool Paper remains the dominant field. Cobalt, red, and yellow are production inks, not decorative washes.
+**The Stage-Dominance Rule.** Midnight remains the largest color field. Bright inks arrive as props and state signals, never as soft background decoration.
 
-**The Semantic Ink Rule.** Cobalt means action or score, red means annotation or urgency, and yellow means authority, focus, or achievement. Never rely on color alone to communicate state.
+**The Four-Ink Rule.** Lime means evidence or progress, coral means urgency or voting, yellow means authority or victory, and purple means supporting depth. State must also remain legible through text, shape, or position.
 
 ## Typography
 
-**Display Font:** Georgia with Times New Roman and serif fallbacks  
-**Body Font:** Trebuchet MS when available, then native system sans-serif fallbacks
+**Display Font:** Impact with Haettenschweiler and condensed Arial fallbacks
+**Body Font:** Arial with Helvetica and system sans-serif fallbacks
 
-The serif voice supplies oversized, slightly compressed yearbook drama; the sans-serif voice handles instructions, form labels, status, and small factual metadata.
+The display voice behaves like a comic cover and a live-game scoreboard: compressed, blunt, uppercase, and extremely large. The body voice stays familiar and durable so prompts, choices, scores, and status remain readable during fast phone play.
 
-- **Public display:** `clamp(48px, 7vw, 118px)`, bold, `0.93` line-height, `-0.045em` tracking. Use for incidents, lobby declarations, and winners.
-- **Controller heading:** `clamp(38px, 11vw, 68px)`, bold, `0.98` line-height; compact to `34px` on very short narrow phones.
-- **Deck:** Georgia, `clamp(20px, 2vw, 34px)`, `1.3` line-height.
-- **Answer copy:** Georgia, bold, `clamp(16px, 1.2vw, 20px)`, `1.15` line-height.
-- **Labels and eyebrows:** system sans, heavy, uppercase, correction red or ink, with roughly `0.12em–0.13em` tracking.
-- **Body and form copy:** system sans at native readable sizes; controls inherit the body face.
+- **Display:** heavyweight condensed all-caps for incident reveals, lobby declarations, results, and winners.
+- **Headline:** condensed all-caps for controller phase titles, motives, labels, and scores.
+- **Body:** bold sans-serif for instructions, answers, choice copy, and receipts.
+- **Label:** extra-bold uppercase sans-serif with wide tracking for ribbons, metadata, status, and authority.
 
-**The Headline-and-Record Rule.** Serif type carries the joke or declaration. Sans-serif type records who, when, what to do, and what changed.
+**The Broadcast-Scale Rule.** Public jokes and verdicts must read from across a room. If a heading could pass for normal webpage type, it is too small.
+
+**The One-Shout Rule.** Each state gets one dominant declaration. Supporting labels stay compact so the hierarchy does not become a wall of shouting.
 
 ## Layout
 
-Public surfaces are full-viewport editorial spreads with a persistent masthead, phase content, and a footer stating that the display is view-only. The lobby uses a balanced two-column hero. Round intro becomes a cobalt full-screen bulletin; writing and voting pin the incident to a large white show card above numeric submission progress; results stage answer cards with an accurate Crowd Favorite stamp; finale adds finite celebratory confetti. More than four answers automatically page in groups of four every eight seconds so the passive display never requires scrolling. Finale content compacts at short desktop heights and may use a two-column scoreboard below `760px` high.
+Public surfaces are fixed theatrical canvases with a top broadcast header, one phase-specific center stage, and a small view-only footer. Lobby and instructions pair a copy block with an oversized evidence wheel. Round phases center a giant tilted incident panel over progress hardware. Results use an asymmetrical wall: the crowd favorite owns the lead panel while supporting answers form smaller smashed panels beside it. Finale places a winner burst opposite a complete score race with superlatives below.
 
-At `780px` and below, public grids collapse to one column, status metadata recedes, answer cards stack, and artwork scales to the available width. Public spacing uses fluid clamps so a television and a tablet preserve the same hierarchy.
+The large-display composition is intentionally asymmetric and uses controlled overlap. It must still fit at 1280×720 without page scrolling. Below 920px, public grids collapse to a single-column tablet/spectator composition and regain natural document height. Short landscape displays compact the incident stage and arrange the finale scoreboard in two columns.
 
-Controllers are centered personal pages up to `720px` wide with viewport-safe padding, an initialed player tile, and a semantic game-progress track. Writing keeps the incident, motive, input, character count, deadline, and submit action in one vertical flow. Voting is intentionally split into visibly numbered Decode and Crown steps; boxed radio choices lift and recolor when selected while preserving native input behavior and confirmed-runtime-echo recovery. For viewports at most `380px × 650px`, headings, margins, quote cards, and choices compact without reducing the touch target below `50px`; the current primary writing or voting action pins above the bottom safe area so it is always visible.
+Controllers are single-column game pads up to 720px wide with safe-area padding. Identity, authority, and a six-step phase track remain at the top; the current play task owns the rest of the viewport. At 380×680 and below, typography and vertical gaps compress, and the active writing or voting action docks above the bottom safe area. No controller target falls below 52px in the compact flow.
+
+**The One-Prop Rule.** Every public phase needs one unmistakable silhouette that communicates the current game beat before its copy is read.
 
 ## Elevation & Depth
 
-Depth is structural and print-like. Surfaces remain flat; selected artifacts lift with hard, unblurred offset shadows and slight rotation, as if pasted into a yearbook by hand.
+Depth is physical and theatrical: thick outlines separate paper from stage, colored offset shadows make panels feel slammed into place, and limited dark drop shadows suggest studio lights. The system does not use blurred glass, translucent cards, or ambient SaaS elevation.
 
-- **Lobby artwork:** `13px 16px 0` cobalt beneath a white photo border.
-- **Primary actions:** `5px 5px 0` Yearbook Ink; active press moves `3px` and reduces the shadow to `2px 2px 0`.
-- **Motive and success cards:** cobalt or white sheets with `5px–7px` trophy-yellow offsets.
-- **Answer cards:** `6px 6px 0` Rule Line.
-- **Selected choices:** `6px 6px 0` cobalt beneath a trophy-yellow selection field.
-- **Rotations:** small `1deg–3deg` rotations distinguish notes, stamps, marks, and badges without compromising readability.
+- **Broadcast hardware:** bright panels use four- to nine-pixel ink borders with five- to seventeen-pixel coral, purple, or blue offsets.
+- **Hero props:** the evidence wheel, incident panel, lead answer, and winner burst may add one larger dark drop shadow behind the colored offset.
+- **Controller press:** controls move down and right while their hard shadow contracts, creating a physical button response.
+- **Focus:** interactive controls receive a warm-paper outline plus trophy-yellow outer halo.
+- **Motion:** props arrive with a short slam, crash, stamp, or scale beat. Large raster backgrounds remain static so multi-surface rooms do not waste continuous compositing work. All authored motion disappears under reduced-motion preference without losing information.
 
-**The Physical Print Rule.** Use hard offsets, borders, and restrained rotation. Do not introduce soft ambient shadows, glass effects, or gradients.
+**The Hard-Shadow Rule.** Color offsets provide structure. Blur is reserved for the single deep shadow beneath a hero prop, never for ordinary cards.
 
 ## Shapes
 
-The dominant form is square paper: zero-radius buttons, fields, cards, notices, and labels with two- or three-pixel ink borders. Circles are reserved for progress dots, the submitted check seal, and the finale trophy seal. Borders and underlines create the editorial grid; transforms should feel hand-placed, never randomly noisy.
+The system mixes square comic panels with circular game-show hardware. Answer cards, inputs, choices, buttons, status blocks, and score rows are square with heavy outlines. Player avatars, wheel rings, timer badges, and voting markers are circles. Motive tickets use clipped quadrilateral edges; submitted receipts and the finale use controlled starbursts. Small rotations imply physical placement without reducing legibility.
+
+**The Silhouette Rule.** Geometry must communicate purpose: panels contain evidence, circles track players or progress, and starbursts celebrate locked or winning states.
 
 ## Components
 
-### Public primitives
+### Broadcast header
 
-- **Masthead and status strip:** CS school mark, surface label, round/player state, and reconnect status. Lobby avoids duplicating its player count.
-- **Yearbook artwork and join note:** the square portrait collage from `assets/card.png`, backed by cobalt, plus the trophy-yellow controller instruction.
-- **Incident spread:** centered impossible incident, round stamp, short deck, progress dots, and timer.
-- **Incident show card:** writing and voting use a white, ink-bordered statement sheet with a cobalt or red hard offset and a large low-contrast verdict word behind it.
-- **Submission meter:** oversized numeric count, one dot per active player, a proportion bar, and explicit waiting/completion copy.
-- **Answer stage:** up to four staged white answer cards per automatic page; cover text, correction-red motive, author/vote/decode byline, Crowd Favorite stamp, and page position remain visible together.
-- **Scoreboard and superlatives:** ranked rows use red ranks and cobalt scores; the finale handles ties and names Best Cover and Sharpest Detective.
+The generated Cover Story logo anchors the left edge, followed by a clipped coral surface tag. Room and round status sit in outlined black chips on the right. The header is information only on public surfaces.
 
-Host and spectator share the public renderer. They may contain semantic text, images, lists, status, and a non-live timer, but no buttons, links, inputs, selects, textareas, content editing, positive tab stops, or keyboard-driven game controls.
+### Evidence wheel and player tokens
 
-### Controller primitives
+The wheel teaches the complete loop—Cover, Decode, Crown—before play begins. Connected players appear as named circular tokens locked around the wheel, making room readiness feel like a game board rather than a roster list.
 
-- **Header:** player identity, game title, room status, and a trophy-yellow `Room director` badge only when the shell context designates that controller as authority.
-- **Game progress:** a semantic six-step progressbar beneath the header; phase changes animate through composited scale rather than layout-changing width.
-- **Motive card:** cobalt private disclosure with a yellow offset and explicit scoring hint.
-- **Choices:** native radio inputs inside boxed full-row labels with explicit circular markers, yellow selected fields, and cobalt offsets; minimum action height remains phone-friendly.
-- **Ballot steps:** a two-part Decode/Crown strip makes current and completed work immediately legible.
-- **Primary and secondary actions:** square, full-width, ink-bordered controls with hard press depth. Pending writes disable and relabel the action.
-- **Countdown:** correction-red outlined timer with `role="timer"` and `aria-live="off"`.
-- **Notices and receipts:** reconnect, rejection, submitted, late-joiner, waiting, and personal-result states use explicit text and confirmed runtime state.
+### Incident panel
 
-The shell owns room lifecycle and authority. The authority badge and finale room actions derive only from shell context; non-authority controllers never render organizer actions. Authority changes must preserve the current draft, textarea selection and focus, decode choice, favorite choice, and confirmed-write behavior. Controllers write only their own durable intent; canonical shared state is displayed only after the authority-confirmed echo.
+The current impossible incident lives on a large warm-paper panel with a heavy outline, coral offset, stamped metadata, and supporting direction. Writing and voting place a separate progress console below it rather than mixing interaction into the public display.
 
-Native labels and fieldsets remain the accessibility foundation. Interactive targets are at least `44px`, focus uses an ink outline plus trophy-yellow halo, safe-area insets protect phone controls, reduced-motion preferences suppress motion, and errors use `role="alert"`. Reconnecting and late-joiner states replace unavailable choices with clear waiting copy.
+### Answer panels and score race
 
-## Motion
+The highest-voted answer receives the lead lime or yellow panel. Supporting answers use smaller warm-paper panels with purple depth. Favorite stickers, vote counts, motives, authors, and points are explicit. Score rows pair rank, avatar token, player name, progress bar, and score; the finale keeps every player visible.
 
-Motion is a show beat, never game state. The incident card scales from an already visible source, the controller receipt seal pops once, result cards reveal in a short 100 ms stagger, and finale confetti runs for two finite passes. Urgent timers pulse only three times. Every authored animation is inside `prefers-reduced-motion: no-preference`; reduced-motion users receive the same text, color, placement, and score information without motion.
+### Controller actions
+
+Primary actions use the current phase color, a four-pixel ink border, a hard ink shadow, and condensed uppercase copy. Secondary actions use the recessed midnight console. Hover lifts a choice; active press scales and translates the button. Pending writes disable and relabel the action until a confirmed runtime echo arrives.
+
+### Secret ticket, choices, and receipts
+
+The private motive is a clipped lime ticket with a coral SECRET stamp. Voting choices are full-row paper panels containing native radio inputs and circular markers; selection changes the whole field to the phase color. Submitted state uses a stamped check burst, while personal results use a paper receipt with explicit decode and round-score copy.
+
+Host and spectator may render semantic text, images, lists, status, and passive timers only. They must contain no button, link, form control, content editing, positive tab stop, or keyboard-driven game behavior. Authority-only room actions derive from shell context and render only on the designated authority controller.
 
 ## Do's and Don'ts
 
 ### Do
 
-- **Do** preserve the late-1990s impossible-yearbook metaphor across every new phase and state.
-- **Do** keep public information large, staged, and readable without host interaction.
-- **Do** keep motives, ballots, writing, voting, settings, and room direction in normal controller UI only.
-- **Do** render confirmed runtime echoes and preserve in-progress controller form state across updates.
-- **Do** reuse the masthead, status strip, incident spread, answer card, scoreboard, motive card, choice row, notice, countdown, and action styles before inventing new patterns.
-- **Do** test minimum and maximum player fixtures at large-host, tablet/spectator, normal-phone, and `380px × 650px`-or-smaller viewports.
+- **Do** make every phase look like a new shot in the same live comic broadcast.
+- **Do** preserve one dominant public game prop and one dominant declaration per state.
+- **Do** use the generated logo, catalog art, and distressed stage texture as production assets rather than recreating them with placeholder gradients.
+- **Do** keep all writing, voting, settings, and room direction on controllers.
+- **Do** render confirmed runtime echoes and preserve controller drafts, focus, selection, and checked choices across subscriptions.
+- **Do** verify 1280×720 hosts, tablet spectators, 360×640 phones, and 320×568 compact controllers.
+- **Do** keep public surfaces at zero interactive or focusable elements in every phase.
 
 ### Don't
 
-- **Don't** add any interactive or focusable element to host or spectator game surfaces.
-- **Don't** expose private motives or ballots through host or spectator presentation; presentation hiding is casual game privacy, not a claim of SDK-level confidentiality.
-- **Don't** use modern rounded-card, soft-shadow, glass, gradient, or dashboard conventions that break the print world.
-- **Don't** truncate player cover text to make results fit; automatically page or reflow the passive reveal.
-- **Don't** use red, blue, or yellow as decoration without their established semantic role.
-- **Don't** add motion that is required to understand state or that ignores `prefers-reduced-motion`.
+- **Don't** fall back to a centered website hero, generic dashboard grid, pill-heavy UI, soft cards, glass, or decorative gradients.
+- **Don't** use bright palette colors interchangeably; preserve their game-state roles.
+- **Don't** shrink public reveals into ordinary headings or flatten the lead answer into an equal card grid.
+- **Don't** expose private motives or ballots through host or spectator presentation.
+- **Don't** require motion to understand state or ignore `prefers-reduced-motion`.
+- **Don't** add organizer actions to a non-authority controller or any action to the host display.

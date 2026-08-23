@@ -34,6 +34,12 @@ test("host and spectator scenario surfaces stay passive in every major phase", a
     }
   }
 
+  await page.goto("/surfaces/gallery.html?scenario=lobby&surface=host&players=5&nav=0");
+  await expect(page.locator(".evidence-wheel")).toBeVisible();
+  await expect(page.locator(".player-token")).toHaveCount(5);
+  await page.goto("/surfaces/gallery.html?scenario=roundIntro&surface=host&players=5&nav=0");
+  await expect(page.locator(".incident-panel")).toBeVisible();
+
   await page.setViewportSize({ width: 1280, height: 720 });
   for (const scenario of ["instructions", "finale"]) {
     await page.goto(`/surfaces/gallery.html?scenario=${scenario}&surface=host&players=8&nav=0`);
@@ -100,7 +106,7 @@ test("four Workbench controllers complete a round through controller authority",
   await expect(page.getByRole("heading", { name: "Cover Story" })).toBeVisible();
   await expect.poll(() => controllerFrames(page.frames()).length).toBe(4);
   const initialHost = page.frames().find((frame) => frame.url().includes("/surfaces/host.html"))!;
-  expect(await initialHost.locator("img.yearbook-art").evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+  expect(await initialHost.locator("img.game-logo").evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
 
   const participantCards = page.locator("aside article");
   await participantCards.nth(1).getByRole("button", { name: "Make authority" }).press("Enter");
@@ -161,12 +167,13 @@ test("four Workbench controllers complete a round through controller authority",
   await expect(controllers[1]!.locator("input[name='favoriteAnswerId']:checked")).toHaveCount(1);
   for (const frame of controllers.slice(1)) {
     await frame.locator("input[name='favoriteAnswerId']").first().press("Space");
-    await frame.getByRole("button", { name: "Submit my ballot" }).press("Enter");
+    await frame.getByRole("button", { name: "Submit my ballot" }).click();
   }
 
-  await expect(host.getByRole("heading", { name: "The truth comes out" })).toBeVisible();
+  await expect(host.locator(".results-stage")).toBeVisible();
   controllers = controllerFrames(page.frames());
   await expect(host.locator(".answer-card")).toHaveCount(4);
+  await expect(host.locator(".answer-card--lead")).toHaveCount(1);
   await expect(controllers[0]!.locator(".scoreboard")).toBeVisible();
   for (const controller of controllers) {
     await expect(controller.locator(".notice--error")).toHaveCount(0);

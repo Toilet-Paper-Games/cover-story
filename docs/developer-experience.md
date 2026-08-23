@@ -185,3 +185,36 @@ These compatibility and packaging changes are game-specific and were fixed in th
 Version `0.1.6` was published to the public catalog and completed isolated-context production runs in fresh rooms `SP5G09` and `66I2T9`. The exact controller and host assets loaded from the registry's `cover-story/0.1.6` paths. Three mobile/touch controller contexts submitted three covers and three ballots, results committed 100 points to each player in this deliberately symmetric ballot, and all controllers received personal result feedback. The passive host iframe contained zero interactive or focusable elements at results.
 
 Reusable findings were deduplicated and recorded in platform issues [#923](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/923), [#932](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/932), [#937](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/937), [#938](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/938), and [#939](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/939). Issue #932 already described the exact CLI device-login failure, so no duplicate was created. Full evidence is in [production-verification.md](./production-verification.md).
+
+## 2026-08-23 — comic-broadcast identity replacement
+
+### Attempt
+
+The previous amplified yearbook still read as a themed responsive site instead of a purpose-built party game. The visual world was replaced with a live comic cover-up broadcast while preserving the tested domain, SDK, authority, and controller-only interaction contracts.
+
+The work used three generated host-stage compositions to establish the lobby, incident, and results silhouettes; generated production logo, stage texture, catalog card, and thumbnail assets; then rebuilt host, spectator, and controller presentation around those assets. Deterministic gallery states were captured at 1440×900, 1280×720, and 360×640 before final validation.
+
+### What worked well
+
+- The built-in image generator produced usable transparent logo artwork, catalog art, and a high-detail distressed broadcast texture. Prompts are embedded in PNG metadata and the assets remain reproducible inputs rather than unexplained binary drops.
+- The scenario gallery made it possible to compare lobby, round intro, writing, voting, results, finale, and compact controller states without replaying earlier phases.
+- Phase-specific silhouettes—evidence wheel, incident slam, lead-answer wall, score race, and winner burst—made the current state legible before reading detailed copy.
+- Runtime inline background URLs preserved a single copied texture file in the final bundle while still allowing Vite's library-mode CSS extraction.
+- The one-time design detector found no hard functional anti-pattern; its stale typography and palette warnings were resolved by regenerating `DESIGN.md` and `.impeccable/design.json` from the shipped system.
+
+### Problems and workarounds
+
+| Scope | Problem | Workaround | Suggested fix and acceptance criteria |
+| --- | --- | --- | --- |
+| Local design tooling | The Penpot MCP tool was discoverable, but the required read-only overview timed out twice because no live Penpot plugin/page connection was available. | Terminate the bounded attempts, keep the exact failure in this journal, and use checked-in design truth plus browser renders. No `.penpot` artifact was fabricated. | Tooling-local until reproducible as a TP Games platform failure. Acceptance: a connected session returns the overview and can export a repository snapshot without restarting the task. |
+| Standalone bundling / platform DX | Referencing the 2.1 MB stage texture from imported CSS caused Vite library mode to inline the raster into each extracted surface stylesheet, multiplying the production archive. | Keep the raster as a copied `/assets/` file and set the background URL at the presentation boundary. | Existing platform issue [#939](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/939) covers automatic extracted-asset linking. Acceptance should also ensure large CSS-referenced assets are emitted once and linked rather than duplicated as data URLs. |
+| Game repository | The first 1280×720 finale composition clipped lower score rows and the first compact writing layout let the timer overlap the prompt. | Place the finale score race in an explicit grid track and pin the compact timer to a reserved top-right HUD position. | Fixed locally. Acceptance: all eight finale rows and both superlatives are visible at 1280×720; the writing timer does not overlap any copy or field at 360×640 or 320×568. |
+| Game repository | The previous design contract still prescribed Georgia, paper-first backgrounds, and equal editorial cards after the implementation had moved to a midnight comic broadcast. | Refresh the normative design tokens, eight canonical design sections, sidecar component snippets, and stable screenshots from the finished implementation. | Fixed locally. Acceptance: future screens use the comic-broadcast palette, condensed display scale, phase prop grammar, and controller game-pad primitives without reintroducing the yearbook website layout. |
+
+### Ownership and issue deduplication
+
+The Penpot connection is local tooling evidence and does not justify a TP Games issue. The asset-linking behavior is already represented by #939, so no duplicate was filed. Layout and design-contract fixes belong only to this standalone game repository.
+
+### Production-only findings
+
+None in the redesign itself. Publication and a fresh-room playthrough of version `0.2.0` are recorded after the release gates and production verification complete.

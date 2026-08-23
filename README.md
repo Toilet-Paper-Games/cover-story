@@ -1,6 +1,6 @@
 # Cover Story
 
-Cover Story is a 3–8 player Toilet Paper Games party game. An impossible incident appears, every controller receives a private motive, and each player writes a one-sentence anonymous cover story. Players then decode one classmate’s motive and crown a favorite cover. Three rounds end with permanent-record superlatives.
+Cover Story is a 3–8 player Toilet Paper Games party game staged as a live comic cover-up broadcast. An impossible incident appears, every controller receives a private motive, and each player writes a one-sentence anonymous cover story. Players then decode another player’s motive and crown a favorite cover. Three rounds end with a winner reveal and ridiculous superlatives.
 
 The shared host display and spectator surface are entirely passive. All writing, voting, acknowledgements, settings, and room direction happen on controllers; room controls render only for the shell-designated authority controller.
 
@@ -46,7 +46,7 @@ npm run check
 
 The browser suite checks every host and spectator scenario for zero interactive/focusable elements, verifies 320 px controllers and authority-control isolation, and completes a real four-controller Workbench round including submissions, voting, scoring, reconnect, and authority handoff.
 
-`npm run validate` builds `dist/cover-story-0.1.0.zip`, runs boundary and capability checks, and strictly validates the directory and archive. Generated dependencies, builds, reports, archives, credentials, and environment files are ignored and must not be committed.
+`npm run validate` builds the versioned archive in `dist/`, runs boundary and capability checks, and strictly validates the directory and archive. Generated dependencies, builds, reports, archives, credentials, and environment files are ignored and must not be committed.
 
 ## Publishing
 

@@ -52,44 +52,44 @@ export interface ControllerViewModel extends PublicViewModel {
 
 const phaseCopy: Record<CoverStoryPhase, { eyebrow: string; title: string; subtitle: string }> = {
   lobby: {
-    eyebrow: "The yearbook room",
-    title: "Class picture pending",
-    subtitle: "Join on your phone. Three cover artists are needed to start."
+    eyebrow: "Studio lobby",
+    title: "Assemble the cover-up crew",
+    subtitle: "Join on your phone. Three players are needed to open the first case."
   },
   instructions: {
     eyebrow: "How to play",
-    title: "Make the unbelievable sound reasonable",
-    subtitle: "Write a cover. Decode someone else's motive. Crown your favorite."
+    title: "Three moves. One suspicious story.",
+    subtitle: "Cover the incident. Decode a hidden motive. Crown the funniest alibi."
   },
   "round-intro": {
-    eyebrow: "Breaking school news",
-    title: "A fresh incident just made the yearbook",
+    eyebrow: "Breaking case",
+    title: "A new incident just hit the studio",
     subtitle: "Your private motive is waiting on your controller."
   },
   writing: {
-    eyebrow: "Anonymous statements",
-    title: "Everyone has an explanation",
-    subtitle: "Write one sentence without naming your exact motive."
+    eyebrow: "Cover phase",
+    title: "Build an alibi that almost works",
+    subtitle: "Write one sentence. Hint at your motive without giving it away."
   },
   voting: {
-    eyebrow: "Read between the lines",
-    title: "Decode and crown",
-    subtitle: "Match one cover to its motive, then choose the best cover story."
+    eyebrow: "Expose phase",
+    title: "Crack one story. Crown another.",
+    subtitle: "Match one cover to its motive, then choose the funniest alibi."
   },
   results: {
-    eyebrow: "Permanent record",
-    title: "The truth comes out",
-    subtitle: "Detectives score. Clever clues score when decoded. Favorites score biggest."
+    eyebrow: "Case results",
+    title: "The cover-up cracks",
+    subtitle: "Favorites hit hardest. Correct decodes score. Getting decoded scores too."
   },
   "next-round": {
-    eyebrow: "Turn the page",
-    title: "Another incident is developing",
-    subtitle: "New story. New private motive. Same questionable judgment."
+    eyebrow: "Studio reset",
+    title: "Another impossible case is incoming",
+    subtitle: "New incident. New motive. Same suspicious crew."
   },
   finale: {
-    eyebrow: "Senior superlatives",
-    title: "The cover story class of this room",
-    subtitle: "The permanent record is now extremely permanent."
+    eyebrow: "Final headline",
+    title: "One story rules the room",
+    subtitle: "The studio has reached a deeply questionable verdict."
   }
 };
 
@@ -112,7 +112,7 @@ export function buildPublicViewModel(snapshot: CoordinatorSnapshot): PublicViewM
     return {
       phase: "connecting",
       eyebrow: "Cover Story",
-      title: "Opening the yearbook",
+      title: "Warming up the broadcast",
       subtitle: "The room is connecting to the class archive.",
       roundLabel: "Preparing room",
       countdownAt: null,
@@ -133,7 +133,7 @@ export function buildPublicViewModel(snapshot: CoordinatorSnapshot): PublicViewM
     ...copy,
     ...(lobbyReady
       ? {
-          title: "Class picture ready",
+          title: "The cover-up crew is ready",
           subtitle: "The room director starts the game from their controller."
         }
       : {}),
@@ -209,7 +209,7 @@ export function buildControllerViewModel(snapshot: CoordinatorSnapshot): Control
 function rejectionCopy(reason?: string): string {
   const copy: Record<string, string> = {
     "already-submitted": "Your first cover is locked in for this round.",
-    "already-voted": "Your ballot is already in the yearbook office.",
+    "already-voted": "Your ballot is already locked into the broadcast.",
     "cover-too-short": "Give the cover a little more detail.",
     "cover-too-long": "Keep the cover to 140 characters.",
     "duplicate-cover": "That cover matches another answer. Make it yours.",

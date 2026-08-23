@@ -1,7 +1,7 @@
 {
   "game": {
     "id": "cover-story",
-    "version": "0.1.6",
+    "version": "0.2.0",
     "title": "Cover Story"
   },
   "bundle": {
@@ -35,8 +35,20 @@
         }
       },
       {
-        "from": "assets",
-        "to": "assets"
+        "from": "assets/card-v2.png",
+        "to": "assets/card-v2.png"
+      },
+      {
+        "from": "assets/thumbnail-v2.png",
+        "to": "assets/thumbnail-v2.png"
+      },
+      {
+        "from": "assets/cover-story-logo.png",
+        "to": "assets/cover-story-logo.png"
+      },
+      {
+        "from": "assets/comic-stage-texture.png",
+        "to": "assets/comic-stage-texture.png"
       }
     ]
   }
