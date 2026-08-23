@@ -59,4 +59,4 @@ Independent role-based reviews and the multi-controller browser playtest agreed 
 - [#938 Align Workbench role and iframe sandbox contracts with production](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/938)
 - [#939 Make standalone bundling link Vite-extracted CSS automatically](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/939)
 
-The temporary CLI login attempt was logged out after the device-flow failure. `tpgames whoami` confirmed there was no saved local session; publication used the already-authenticated Creator Portal, and no credential or environment file was added to the repository.
+The task's temporary CLI login attempt was logged out after the device-flow failure, and `tpgames whoami` confirmed there was no saved session at that point. A later final check saw a CLI session restored by a concurrent TP Games publishing workflow, so this task did not revoke or alter that shared external session. Cover Story publication used the already-authenticated Creator Portal, and no credential or environment file was added to the repository.
