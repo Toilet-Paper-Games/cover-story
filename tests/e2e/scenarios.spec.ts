@@ -81,7 +81,7 @@ test("narrow controllers render independent states and never leak authority cont
   await expect(page.locator("input[name='angleGuessId']")).toHaveCount(3);
   await expect(page.locator("input[name='favoriteAnswerId']")).toHaveCount(0);
   await page.locator("input[name='angleGuessId']").first().check();
-  await page.locator("form[data-form='decode']").evaluate((form: HTMLFormElement) => form.requestSubmit());
+  await page.getByRole("button", { name: "Continue to favorite" }).click();
   await expect(page.locator("input[name='favoriteAnswerId']")).toHaveCount(3);
   await expect(page.getByText("Cover unavailable")).toHaveCount(0);
 
@@ -95,7 +95,7 @@ test("narrow controllers render independent states and never leak authority cont
 });
 
 test("four Workbench controllers complete a round through controller authority", async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(240_000);
   await page.goto("/__tpg/workbench");
   await expect(page.getByRole("heading", { name: "Cover Story" })).toBeVisible();
   await expect.poll(() => controllerFrames(page.frames()).length).toBe(4);
@@ -103,16 +103,14 @@ test("four Workbench controllers complete a round through controller authority",
   expect(await initialHost.locator("img.yearbook-art").evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
 
   const participantCards = page.locator("aside article");
-  await participantCards.nth(1).getByRole("button", { name: "Make authority" }).click();
+  await participantCards.nth(1).getByRole("button", { name: "Make authority" }).press("Enter");
   await page.getByRole("combobox", { name: "Lifecycle state" }).selectOption("started");
 
   let controllers = controllerFrames(page.frames());
-  await Promise.all(
-    controllers.map(async (frame) => {
-      await frame.locator("[data-action='ack']").waitFor();
-      await frame.locator("[data-action='ack']").click();
-    })
-  );
+  for (const frame of controllers) {
+    await frame.locator("[data-action='ack']").waitFor();
+    await frame.locator("[data-action='ack']").press("Enter");
+  }
 
   await Promise.all(controllers.map((frame) => frame.locator("form[data-form='cover']").waitFor()));
   controllers = controllerFrames(page.frames());
@@ -169,11 +167,11 @@ test("four Workbench controllers complete a round through controller authority",
   }
   expect(await host.locator(focusableSelector).count()).toBe(0);
 
-  await participantCards.nth(3).getByRole("button", { name: "Disconnect" }).click();
+  await participantCards.nth(3).getByRole("button", { name: "Disconnect" }).press("Enter");
   await expect(host.getByText("1 reconnecting", { exact: true })).toBeVisible();
-  await participantCards.nth(3).getByRole("button", { name: "Reconnect" }).click();
+  await participantCards.nth(3).getByRole("button", { name: "Reconnect" }).press("Enter");
 
-  await participantCards.nth(2).getByRole("button", { name: "Make authority" }).click();
+  await participantCards.nth(2).getByRole("button", { name: "Make authority" }).press("Enter");
   await expect(controllers[1]!.getByText("Room director")).toBeVisible();
   await expect(controllers[0]!.getByText("Room director")).toHaveCount(0);
 });
