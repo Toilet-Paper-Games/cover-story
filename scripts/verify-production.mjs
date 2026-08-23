@@ -134,6 +134,10 @@ try {
   }
 
   const hostResult = (await hostFrame.locator("main").innerText()).replace(/\s+/g, " ").trim();
+  await hostFrame.locator(".answer-card").first().waitFor();
+  await hostFrame.locator(".answer-card").evaluateAll((cards) =>
+    Promise.all(cards.flatMap((card) => card.getAnimations().map((animation) => animation.finished)))
+  );
   const screenshotPath = `output/production-${roomCode}-${expectedVersion}.png`;
   await host.screenshot({ path: screenshotPath, fullPage: true });
 

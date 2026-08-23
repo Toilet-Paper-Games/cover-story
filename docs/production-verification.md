@@ -24,7 +24,7 @@
 ## Fresh production room
 
 - Verification command: `npm run verify:production`
-- Room code: `SP5G09`
+- Room codes: `SP5G09` (first complete pass) and `66I2T9` (repeat pass with stabilized screenshot capture)
 - Independent browser contexts: 1 passive host plus 3 isolated mobile/touch controllers (`Mara`, `Nico`, and `Pip`)
 - Shell-designated authority: controller index 0
 - Authority-control counts inside controller game iframes: `[1, 0, 0]`
@@ -37,7 +37,7 @@
 - Personal result feedback reached all three controllers: yes
 - Host iframe interactive/focusable element count at results: **0**
 - Host copy confirmed: `ALL CHOICES HAPPEN ON CONTROLLERS · THIS DISPLAY IS VIEW-ONLY`
-- Screenshot artifact: `output/production-SP5G09-0.1.6.png`
+- Screenshot artifact: `output/production-66I2T9-0.1.6.png`
 
 The production result page showed all three cover cards, their real motives, favorite-vote counts, per-answer points, and the class standings. Each controller showed its own decode result and round score. The host never supplied or required an input.
 
