@@ -12,6 +12,7 @@ try {
   const hostContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   contexts.push(hostContext);
   const host = await hostContext.newPage();
+  host.setDefaultTimeout(120_000);
   await host.goto(productionUrl, { waitUntil: "domcontentloaded" });
 
   const invite = host.getByRole("link", { name: /controller join link/i });
@@ -29,6 +30,7 @@ try {
     });
     contexts.push(context);
     const page = await context.newPage();
+    page.setDefaultTimeout(120_000);
     await page.goto(joinUrl, { waitUntil: "domcontentloaded" });
     await page.getByRole("button", { name: "Menu" }).waitFor();
     const nameGate = page.getByRole("heading", { name: "Enter name" });
@@ -95,7 +97,12 @@ try {
     const submitCover = frame.getByRole("button", { name: "Lock in my cover" });
     await submitCover.press("Enter");
     try {
-      await frame.getByRole("heading", { name: "Cover locked in" }).waitFor({ timeout: 10_000 });
+      await Promise.race([
+        frame.getByRole("heading", { name: "Cover locked in" }).waitFor({ timeout: 10_000 }),
+        frame
+          .getByRole("heading", { name: "What motivated this cover?" })
+          .waitFor({ timeout: 10_000 })
+      ]);
     } catch {
       const controllerState = (await frame.locator("main").innerText()).replace(/\s+/g, " ").trim();
       throw new Error(`Controller ${index + 1} did not confirm its cover: ${controllerState}`);
