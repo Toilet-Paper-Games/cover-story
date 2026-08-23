@@ -8,9 +8,10 @@ export function decodeCoverStoryState(value: unknown): CoverStoryState | undefin
   if (value === undefined) {
     return undefined;
   }
+  if (!isRecord(value) || value.schemaVersion !== GAME_SCHEMA_VERSION) {
+    return undefined;
+  }
   if (
-    !isRecord(value) ||
-    value.schemaVersion !== GAME_SCHEMA_VERSION ||
     typeof value.sessionId !== "string" ||
     typeof value.sequence !== "number" ||
     typeof value.phase !== "string" ||

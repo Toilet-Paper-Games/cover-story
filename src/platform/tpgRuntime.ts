@@ -14,7 +14,12 @@ import type {
 import { decodeCoverStoryState, decodePlayerIntentState } from "../domain/codec";
 import type { CoverStoryState, DomainParticipantRole, PlayerIntentState } from "../domain/model";
 
-function roleOf(role: RuntimeParticipant["role"]): DomainParticipantRole {
+export function mapRuntimeParticipantRole(
+  role: RuntimeParticipant["role"]
+): DomainParticipantRole {
+  if (role === "host") {
+    return "host-display";
+  }
   if (role === "controller" || role === "host-display" || role === "spectator" || role === "logic") {
     return role as DomainParticipantRole;
   }
@@ -26,13 +31,13 @@ function mapParticipant(participant: RuntimeParticipant): RuntimeParticipantValu
     id: participant.id,
     name: participant.screenName,
     connected: participant.connected,
-    role: roleOf(participant.role)
+    role: mapRuntimeParticipantRole(participant.role)
   };
 }
 
 function mapContext(context: SurfaceContext): RuntimeContextValue {
   return {
-    surfaceKind: roleOf(context.surfaceKind),
+    surfaceKind: mapRuntimeParticipantRole(context.surfaceKind),
     participantId: context.participantId,
     authorityParticipantId: context.authorityParticipantId,
     isAuthority: context.isAuthority,
