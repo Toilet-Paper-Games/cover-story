@@ -39,6 +39,7 @@ export class PublicSurfaceRenderer {
       this.resultsRound = 0;
     }
     this.root.innerHTML = `<main class="public-surface phase-${view.phase}">
+      ${showDecor(view)}
       <header class="masthead">
         <div class="brand-mark"><span>CS</span></div>
         <p class="surface-label">${this.mode === "host" ? "The shared yearbook" : "Spectator edition"}</p>
@@ -67,7 +68,7 @@ export class PublicSurfaceRenderer {
       return hero(view, `<ol class="rules-list"><li><b>Cover it.</b><span>Explain the incident without naming your private motive.</span></li><li><b>Decode it.</b><span>Match one classmate's cover to its real motive.</span></li><li><b>Crown it.</b><span>Vote for the cover you wish were true.</span></li></ol>${countdown(view.countdownAt)}`);
     }
     if (view.phase === "round-intro") {
-      return incidentSpread(view, `<p class="secret-note">Private motives are now on controllers.</p>${countdown(view.countdownAt)}`);
+      return incidentSpread(view, `<div class="show-callout"><span aria-hidden="true">↘</span><p>Private motives are live on controllers</p></div>${countdown(view.countdownAt)}`);
     }
     if (view.phase === "writing" || view.phase === "voting") {
       return incidentSpread(view, `${progressDots(view)}${countdown(view.countdownAt)}`);
@@ -79,10 +80,11 @@ export class PublicSurfaceRenderer {
         this.resultsPage * pageSize,
         this.resultsPage * pageSize + pageSize
       );
+      const topVotes = Math.max(0, ...view.results.answers.map((answer) => answer.favoriteVotes));
       return `<section class="results-spread">
         <div class="section-heading"><p class="eyebrow">${html(view.eyebrow)}</p><h1>${html(view.title)}</h1><p>${html(view.subtitle)}</p></div>
         <div class="answer-stage"><div class="answer-wall">${answers
-          .map((answer) => `<article class="answer-card"><p class="answer-copy">“${html(answer.text)}”</p><div class="red-pen">Motive: ${html(answer.angle.label)}</div><p class="byline">${html(answer.authorName)} · ${answer.favoriteVotes} favorite vote${answer.favoriteVotes === 1 ? "" : "s"} · ${answer.decodedByPlayerIds.length} detective${answer.decodedByPlayerIds.length === 1 ? "" : "s"} · +${answer.pointsEarned}</p></article>`)
+          .map((answer, index) => `<article class="answer-card${topVotes > 0 && answer.favoriteVotes === topVotes ? " answer-card--favorite" : ""}" style="--reveal-index:${index}">${topVotes > 0 && answer.favoriteVotes === topVotes ? '<span class="favorite-sticker">Crowd favorite</span>' : ""}<p class="answer-copy">“${html(answer.text)}”</p><div class="red-pen">Motive: ${html(answer.angle.label)}</div><p class="byline">${html(answer.authorName)} · ${answer.favoriteVotes} favorite vote${answer.favoriteVotes === 1 ? "" : "s"} · ${answer.decodedByPlayerIds.length} detective${answer.decodedByPlayerIds.length === 1 ? "" : "s"} · +${answer.pointsEarned}</p></article>`)
           .join("")}</div>
         ${pages > 1 ? `<p class="result-page">Answers ${this.resultsPage * pageSize + 1}–${Math.min((this.resultsPage + 1) * pageSize, view.results.answers.length)} of ${view.results.answers.length}</p>` : ""}</div>
         <aside class="score-panel"><p class="kicker">Class standings</p>${scoreRows(view.scoreboard, true)}${countdown(view.countdownAt)}</aside>
@@ -122,8 +124,29 @@ export class PublicSurfaceRenderer {
     const node = this.root.querySelector<HTMLElement>("[data-deadline]");
     if (!node) return;
     const remaining = Math.max(0, Number(node.dataset.deadline) - Date.now());
-    node.textContent = `${Math.ceil(remaining / 1000)}s`;
+    const seconds = Math.ceil(remaining / 1000);
+    node.textContent = `${seconds}s`;
+    node.classList.toggle("is-urgent", seconds <= 10);
   }
+}
+
+function showDecor(view: PublicViewModel): string {
+  if (view.phase === "round-intro") {
+    return '<div class="show-word show-word--incident" aria-hidden="true">INCIDENT!</div>';
+  }
+  if (view.phase === "writing") {
+    return '<div class="show-word show-word--writing" aria-hidden="true">MAKE IT<br/>BELIEVABLE</div>';
+  }
+  if (view.phase === "voting") {
+    return '<div class="show-word show-word--voting" aria-hidden="true">SUSPICIOUS!</div>';
+  }
+  if (view.phase === "results") {
+    return '<div class="show-word show-word--results" aria-hidden="true">BUSTED</div>';
+  }
+  if (view.phase === "finale") {
+    return `<div class="confetti-field" aria-hidden="true">${Array.from({ length: 18 }, (_, index) => `<i style="--i:${index}"></i>`).join("")}</div>`;
+  }
+  return "";
 }
 
 function tieLabel(players: Array<{ name: string }>): string {

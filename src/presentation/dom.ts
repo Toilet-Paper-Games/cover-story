@@ -29,11 +29,14 @@ export function scoreRows(rows: ScoreRow[], compact = false): string {
 
 export function progressDots(view: PublicViewModel): string {
   if (view.expectedCount === 0) return "";
+  const percentage = Math.round((view.submittedCount / view.expectedCount) * 100);
   return `<div class="submission-progress" aria-label="${view.submittedCount} of ${view.expectedCount} submitted">
+    <div class="progress-score"><strong>${view.submittedCount}</strong><span>of ${view.expectedCount}<br/>locked in</span></div>
     <div class="dot-row">${Array.from({ length: view.expectedCount }, (_, index) =>
       `<span class="progress-dot${index < view.submittedCount ? " is-filled" : ""}"></span>`
     ).join("")}</div>
-    <p>${view.submittedCount} of ${view.expectedCount} handed in</p>
+    <div class="progress-track" aria-hidden="true"><span style="width:${percentage}%"></span></div>
+    <p>${view.submittedCount === view.expectedCount ? "Everybody’s in!" : "Waiting on the rest of the class…"}</p>
   </div>`;
 }
 

@@ -119,3 +119,42 @@ npm run test:e2e
 - Strict boundary, capability, directory, and archive validation passed. The production registry dry-run resolved `cover-story@0.1.0` against `https://tpg-registry.tp-games.workers.dev`.
 - The final archive is 1,185,024 bytes with 12 runtime-only entries. Inspection confirmed no dependencies, VCS metadata, environment files, test artifacts, or credential-shaped files. A preflight inspection caught duplicate inlined card artwork; using the already-copied `/assets/card.png` path reduced the archive from 2,496,274 bytes without changing its contents or behavior.
 - Remaining steps: authenticate immediately before publication, then record production-only evidence in a new journal entry.
+
+## 2026-08-23 — party-show design amplification
+
+### Attempt
+
+The user asked for a more game-like, TV party-game presentation before publication. The redesign preserved the impossible-yearbook identity and all game/runtime contracts while amplifying phase identity, feedback, motion, and controller urgency. The full repo design stack was applied, followed by the Impeccable `bolder` playbook, its one-time detector, a full six-domain interface review, two bounded screenshot rounds, and focused then full browser verification.
+
+### What changed
+
+- Round intro is now a cobalt full-screen bulletin with an oversized incident verdict and slap-on controller callout.
+- Writing and voting use large white incident show cards, oversized submission counts, per-player dots, and a proportion meter.
+- Results stage cards in a short reveal sequence and accurately stamp the page’s highest-voted covers as Crowd Favorite.
+- Finale uses two finite confetti passes; urgent timers pulse only three times. Every authored animation is disabled by `prefers-reduced-motion`.
+- Controllers now have initialed player tiles, a semantic game-progress track, visible Decode/Crown steps, tactile boxed radio choices, and a safe-area-aware short-phone action dock.
+- The body face changed from generic Inter fallback to Trebuchet MS, preserving system fallbacks and the established Georgia display voice.
+
+### Findings and fixes
+
+| Scope | Evidence | Resolution and acceptance criteria |
+| --- | --- | --- |
+| Game repository | The first amplified writing layout exceeded the passive 1440×900 viewport. | Reduced incident-phase display sizing and padding, then fixed public surfaces to the intended viewport canvas. All host/spectator phases now pass vertical and horizontal fit checks. |
+| Game repository | Visually hidden radio inputs initially lost their direct pointer hit target. | Positioned the real native radio over the custom marker and kept the full label clickable. Playwright selects the real input and completes both ballot steps. |
+| Game repository | The new boxed ballot increased short-phone scroll and could put the primary action below the fold. | Added a bordered action dock fixed above the bottom safe area only at `380×650` and below, with content padding behind it. Tests assert both writing and voting primary actions are in the 320×568 viewport. |
+| Game repository | Bright correction red on trophy yellow measured 3.80:1 for small text. | Added the documented deep correction red `#8b1717`; the pair now measures 5.78:1. Other measured core pairs range from 5.48:1 to 16.04:1. |
+| Local design tooling | The Penpot MCP tool became discoverable, but its required read-only overview did not return after 90 seconds because no live plugin/page connection was available. | Terminated the bounded read-only attempt and continued from checked-in design truth and browser renders, as the Penpot skill requires. No `.penpot` artifact was fabricated and no alternate canvas was substituted. Acceptance for tooling remains: the plugin connects and the overview returns before a design write. |
+
+### Verification at this stage
+
+```text
+npm run typecheck
+npm test
+npm run test:e2e
+```
+
+- 9 focused domain/application tests passed.
+- 3 browser journeys passed: every deterministic passive phase, narrow/authority controller states, and a complete four-controller Workbench round.
+- The host and spectator still contain zero focusable or interactive elements.
+- Final reference captures were refreshed at 1440×900, 1280×720, 390×844, and 320×568.
+- Strict directory/archive validation and the production registry dry-run passed again. The redesigned 0.1.0 archive contains the same 12 audited runtime entries and is 1,196,412 bytes.

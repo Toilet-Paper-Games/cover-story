@@ -42,6 +42,9 @@ test("host and spectator scenario surfaces stay passive in every major phase", a
   }
   await page.goto("/surfaces/gallery.html?scenario=results&surface=host&players=8&long=1&nav=0");
   await expect(page.getByText("Answers 1–4 of 8")).toBeVisible();
+  await page.locator(".answer-card").last().evaluate((card) =>
+    Promise.all(card.getAnimations().map((animation) => animation.finished))
+  );
   expect(
     await page.locator(".answer-wall").evaluate((wall) => {
       const boundary = wall.getBoundingClientRect();
@@ -70,7 +73,11 @@ test("narrow controllers render independent states and never leak authority cont
   await expect(page.getByRole("heading", { name: "Holding your place" })).toBeVisible();
   await expect(page.locator("textarea,button,input")).toHaveCount(0);
 
+  await page.goto("/surfaces/gallery.html?scenario=writing&surface=controller&players=8&authority=0&nav=0");
+  await expect(page.getByRole("button", { name: "Lock in my cover" })).toBeInViewport();
+
   await page.goto("/surfaces/gallery.html?scenario=voting&surface=controller&players=8&authority=0&nav=0");
+  await expect(page.getByRole("button", { name: "Continue to favorite" })).toBeInViewport();
   await expect(page.locator("input[name='angleGuessId']")).toHaveCount(3);
   await expect(page.locator("input[name='favoriteAnswerId']")).toHaveCount(0);
   await page.locator("input[name='angleGuessId']").first().check();
