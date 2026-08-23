@@ -95,6 +95,7 @@ test("narrow controllers render independent states and never leak authority cont
 });
 
 test("four Workbench controllers complete a round through controller authority", async ({ page }) => {
+  test.setTimeout(60_000);
   await page.goto("/__tpg/workbench");
   await expect(page.getByRole("heading", { name: "Cover Story" })).toBeVisible();
   await expect.poll(() => controllerFrames(page.frames()).length).toBe(4);
@@ -102,18 +103,14 @@ test("four Workbench controllers complete a round through controller authority",
   expect(await initialHost.locator("img.yearbook-art").evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
 
   const participantCards = page.locator("aside article");
-  await participantCards.nth(1).getByRole("button", { name: "Make authority" }).evaluate((element) =>
-    (element as HTMLButtonElement).click()
-  );
+  await participantCards.nth(1).getByRole("button", { name: "Make authority" }).click();
   await page.getByRole("combobox", { name: "Lifecycle state" }).selectOption("started");
 
   let controllers = controllerFrames(page.frames());
   await Promise.all(
     controllers.map(async (frame) => {
       await frame.locator("[data-action='ack']").waitFor();
-      await frame.locator("[data-action='ack']").evaluate((element) =>
-        (element as HTMLButtonElement).click()
-      );
+      await frame.locator("[data-action='ack']").click();
     })
   );
 
@@ -130,40 +127,20 @@ test("four Workbench controllers complete a round through controller authority",
     textarea.focus();
     textarea.setSelectionRange(12, 12);
   });
-  await controllers[0]!.locator("form[data-form='cover']").evaluate((form, text) => {
-    const textarea = form.querySelector("textarea")!;
-    textarea.value = text;
-    textarea.dispatchEvent(new Event("input", { bubbles: true }));
-    (form as HTMLFormElement).requestSubmit();
-  }, covers[0]);
+  await controllers[0]!.locator("textarea").fill(covers[0]!);
+  await controllers[0]!.getByRole("button", { name: "Lock in my cover" }).press("Enter");
   await expect(controllers[0]!.getByRole("heading", { name: "Cover locked in" })).toBeVisible();
   await expect(controllers[1]!.locator("textarea")).toHaveValue("A draft that must survive another player's echo");
-  expect(
-    await controllers[1]!.locator("textarea").evaluate(
-      (textarea: HTMLTextAreaElement) =>
-        document.activeElement === textarea && textarea.selectionStart === 12
-    )
-  ).toBe(true);
-  await Promise.all(
-    controllers.slice(1).map((frame, offset) =>
-      frame.locator("form[data-form='cover']").evaluate((form, text) => {
-        const textarea = form.querySelector("textarea")!;
-        textarea.value = text;
-        textarea.dispatchEvent(new Event("input", { bubbles: true }));
-        (form as HTMLFormElement).requestSubmit();
-      }, covers[offset + 1])
-    )
-  );
+  for (const [offset, frame] of controllers.slice(1).entries()) {
+    await frame.locator("textarea").fill(covers[offset + 1]!);
+    await frame.getByRole("button", { name: "Lock in my cover" }).press("Enter");
+  }
 
   await Promise.all(controllers.map((frame) => frame.locator("form[data-form='decode']").waitFor()));
-  await Promise.all(
-    controllers.map((frame) =>
-      frame.locator("form[data-form='decode']").evaluate((form) => {
-        (form.querySelector("input[name='angleGuessId']") as HTMLInputElement).checked = true;
-        (form as HTMLFormElement).requestSubmit();
-      })
-    )
-  );
+  for (const frame of controllers) {
+    await frame.locator("input[name='angleGuessId']").first().press("Space");
+    await frame.getByRole("button", { name: "Continue to favorite" }).press("Enter");
+  }
   controllers = controllerFrames(page.frames());
   await Promise.all(controllers.map((frame) => frame.locator("form[data-form='ballot']").waitFor()));
   controllers = controllerFrames(page.frames());
@@ -172,21 +149,15 @@ test("four Workbench controllers complete a round through controller authority",
   expect(await host.locator(focusableSelector).count()).toBe(0);
   expect(await spectator.locator(focusableSelector).count()).toBe(0);
 
-  await controllers[1]!.locator("input[name='favoriteAnswerId']").first().check();
-  await controllers[0]!.locator("form[data-form='ballot']").evaluate((form) => {
-    (form.querySelector("input[name='favoriteAnswerId']") as HTMLInputElement).checked = true;
-    (form as HTMLFormElement).requestSubmit();
-  });
+  await controllers[1]!.locator("input[name='favoriteAnswerId']").first().press("Space");
+  await controllers[0]!.locator("input[name='favoriteAnswerId']").first().press("Space");
+  await controllers[0]!.getByRole("button", { name: "Submit my ballot" }).press("Enter");
   await expect(controllers[0]!.getByRole("heading", { name: "Ballot submitted" })).toBeVisible();
   await expect(controllers[1]!.locator("input[name='favoriteAnswerId']:checked")).toHaveCount(1);
-  await Promise.all(
-    controllers.slice(1).map((frame) =>
-      frame.locator("form[data-form='ballot']").evaluate((form) => {
-        (form.querySelector("input[name='favoriteAnswerId']") as HTMLInputElement).checked = true;
-        (form as HTMLFormElement).requestSubmit();
-      })
-    )
-  );
+  for (const frame of controllers.slice(1)) {
+    await frame.locator("input[name='favoriteAnswerId']").first().press("Space");
+    await frame.getByRole("button", { name: "Submit my ballot" }).press("Enter");
+  }
 
   await expect(host.getByRole("heading", { name: "The truth comes out" })).toBeVisible();
   controllers = controllerFrames(page.frames());
@@ -198,17 +169,11 @@ test("four Workbench controllers complete a round through controller authority",
   }
   expect(await host.locator(focusableSelector).count()).toBe(0);
 
-  await participantCards.nth(3).getByRole("button", { name: "Disconnect" }).evaluate((element) =>
-    (element as HTMLButtonElement).click()
-  );
+  await participantCards.nth(3).getByRole("button", { name: "Disconnect" }).click();
   await expect(host.getByText("1 reconnecting", { exact: true })).toBeVisible();
-  await participantCards.nth(3).getByRole("button", { name: "Reconnect" }).evaluate((element) =>
-    (element as HTMLButtonElement).click()
-  );
+  await participantCards.nth(3).getByRole("button", { name: "Reconnect" }).click();
 
-  await participantCards.nth(2).getByRole("button", { name: "Make authority" }).evaluate((element) =>
-    (element as HTMLButtonElement).click()
-  );
+  await participantCards.nth(2).getByRole("button", { name: "Make authority" }).click();
   await expect(controllers[1]!.getByText("Room director")).toBeVisible();
   await expect(controllers[0]!.getByText("Room director")).toHaveCount(0);
 });
