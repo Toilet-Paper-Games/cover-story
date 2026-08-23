@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "sdkVersion": "1.0.0",
   "title": "Cover Story",
-  "description": "A minimal renderer-free TPG starter that demonstrates host shared state and controller player state.",
+  "description": "Explain an impossible public incident, decode the private motives behind suspicious alibis, and crown the room's favorite cover story.",
   "surfaces": [
     {
       "id": "host",
@@ -17,37 +17,55 @@
       "kind": "controller",
       "entry": "/controller.html",
       "required": true
+    },
+    {
+      "id": "spectator",
+      "kind": "spectator",
+      "entry": "/spectator.html",
+      "required": false
     }
   ],
   "capabilities": [
-    "chat"
+    "analytics",
+    "tpg:shared-state",
+    "tpg:player-state",
+    "tpg:spectators"
   ],
   "permissions": [],
   "gameMetadata": {
-    "primaryCategory": "party-activity",
+    "primaryCategory": "word",
     "secondaryCategories": [
-      "utility"
+      "party-activity",
+      "social-deduction"
     ],
-    "interactionMode": "freeform",
+    "interactionMode": "competitive",
     "sessionPace": "quick",
     "playerCount": {
-      "min": 1,
+      "min": 3,
       "max": 8,
-      "recommended": 3
+      "recommended": 5
     }
   },
   "presentationMetadata": {
-    "shortDescription": "A copyable starter for renderer-free TPG games.",
-    "longDescription": "A minimal host/controller game that uses @tpgames/game-kit for iframe runtime bootstrap, shared state, player state, and registry-ready upload scripts.",
+    "shortDescription": "Write a suspicious alibi, decode hidden motives, and crown the room's favorite cover story.",
+    "longDescription": "An impossible incident just made the yearbook. Every player gets a secret motive and writes an anonymous one-sentence cover story. Decode a classmate's motive, vote for the best excuse, and score for favorite covers, correct deductions, and lies that get successfully decoded. Three quick rounds end with permanent-record superlatives.",
     "cardTitle": "Cover Story",
     "tags": [
-      "starter",
-      "typescript"
-    ]
+      "party",
+      "word-game",
+      "social-deduction",
+      "controller-only"
+    ],
+    "artwork": {
+      "thumbnail": "/assets/thumbnail.png",
+      "card": "/assets/card.png"
+    },
+    "launchColor": "#2146c7",
+    "estimatedDurationMinutes": 10
   },
   "sessionTopology": {
     "display": "required",
-    "supportsSpectators": false,
+    "supportsSpectators": true,
     "playableParticipantModes": [
       "controller"
     ]

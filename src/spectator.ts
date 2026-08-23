@@ -4,6 +4,6 @@ import { PublicSurfaceRenderer } from "./presentation/publicSurface";
 import { bootSurface } from "./platform/bootSurface";
 
 const root = document.getElementById("app");
-if (!root) throw new Error("Missing #app host surface root.");
+if (!root) throw new Error("Missing #app spectator surface root.");
 
-bootSurface("host", "host-display", new PublicSurfaceRenderer(root, "host"));
+bootSurface("spectator", "spectator", new PublicSurfaceRenderer(root, "spectator"));

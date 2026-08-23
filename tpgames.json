@@ -26,6 +26,17 @@
         "replacements": {
           "src=\"../src/controller.ts\"": "src=\"./controller.js\""
         }
+      },
+      {
+        "from": "surfaces/spectator.html",
+        "to": "spectator.html",
+        "replacements": {
+          "src=\"../src/spectator.ts\"": "src=\"./spectator.js\""
+        }
+      },
+      {
+        "from": "assets",
+        "to": "assets"
       }
     ]
   }

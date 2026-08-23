@@ -1,0 +1,158 @@
+import type { GameCoordinator } from "../application/coordinator";
+import { countdown, html, scoreRows, statusStrip } from "./dom";
+import { buildControllerViewModel, type ControllerViewModel } from "./viewModels";
+
+export class ControllerSurfaceRenderer {
+  private coordinator?: GameCoordinator;
+  private unsubscribe?: () => void;
+  private ticker?: number;
+  private draft = "";
+  private ballotStep: "decode" | "favorite" = "decode";
+  private ballotAngleGuessId = "";
+  private ballotFavoriteAnswerId = "";
+
+  constructor(private readonly root: HTMLElement) {}
+
+  connect(coordinator: GameCoordinator) {
+    this.coordinator = coordinator;
+    this.unsubscribe = coordinator.subscribe((snapshot) => this.render(buildControllerViewModel(snapshot)));
+    this.ticker = window.setInterval(() => this.updateCountdown(), 250);
+  }
+
+  dispose() {
+    this.unsubscribe?.();
+    if (this.ticker !== undefined) window.clearInterval(this.ticker);
+  }
+
+  private render(view: ControllerViewModel) {
+    const focused = document.activeElement;
+    const restoreTextarea = focused instanceof HTMLTextAreaElement && this.root.contains(focused);
+    const selection = restoreTextarea
+      ? { start: focused.selectionStart, end: focused.selectionEnd }
+      : undefined;
+    if (restoreTextarea) this.draft = focused.value;
+    const angleChoice = this.root.querySelector<HTMLInputElement>('input[name="angleGuessId"]:checked');
+    const favoriteChoice = this.root.querySelector<HTMLInputElement>('input[name="favoriteAnswerId"]:checked');
+    if (angleChoice) this.ballotAngleGuessId = angleChoice.value;
+    if (favoriteChoice) this.ballotFavoriteAnswerId = favoriteChoice.value;
+    this.root.innerHTML = `<main class="controller-surface phase-${view.phase} player-count-${view.players.length}">
+      <header class="controller-header"><div><p class="eyebrow">${html(view.playerName)}</p><strong>Cover Story</strong></div>${view.isAuthority ? '<span class="authority-badge">Room director</span>' : ""}</header>
+      ${statusStrip(view)}
+      ${view.isReconnecting ? '<div class="notice notice--reconnect"><b>Reconnecting</b><span>Your confirmed answers are safe. This page will catch up automatically.</span></div>' : ""}
+      ${view.rejection ? `<div class="notice notice--error" role="alert">${html(view.rejection)}</div>` : ""}
+      ${this.phaseBody(view)}
+    </main>`;
+    this.bind(view);
+    if (restoreTextarea) {
+      const textarea = this.root.querySelector<HTMLTextAreaElement>("textarea");
+      textarea?.focus({ preventScroll: true });
+      if (textarea && selection) textarea.setSelectionRange(selection.start, selection.end);
+    }
+    this.updateCountdown();
+  }
+
+  private phaseBody(view: ControllerViewModel): string {
+    if (view.phase === "connecting") return panel("Opening your yearbook…", "Waiting for the room's confirmed state.");
+    if (view.isReconnecting) return panel("Holding your place", "Confirmed answers and scores are safe. Choices unlock after the room catches up.");
+    if (view.isLateJoiner) return panel("Round in progress", "You’re in the room. Your first motive arrives when the next round begins.");
+    if (view.phase === "lobby") return panel("You're in the class picture", `${view.players.length} joined · the room starts with 3 players.${view.isAuthority ? " You are the room director; start the game from the TP Games room controls." : ""}`);
+    if (view.phase === "instructions") {
+      if (view.instructionsAcknowledged) return submitted("Ready noted", "Waiting for the rest of the class.", view);
+      return `<section class="controller-panel"><p class="eyebrow">Three quick moves</p><h1>Cover. Decode. Crown.</h1><ol class="phone-rules"><li>Write one sentence that explains the incident.</li><li>Hide your exact private motive.</li><li>Decode a classmate, then vote for a favorite.</li></ol>${countdown(view.countdownAt)}<button class="primary-action" data-action="ack" ${view.writePending ? "disabled" : ""}>${view.writePending ? "Handing it in…" : "I’m ready"}</button></section>`;
+    }
+    if (view.phase === "round-intro") return `<section class="controller-panel"><p class="eyebrow">${html(view.roundLabel)}</p><h1>${html(view.incident ?? "New incident")}</h1>${motiveCard(view)}<p class="helper">Hint at this motive. Never type its exact words.</p>${countdown(view.countdownAt)}</section>`;
+    if (view.phase === "writing") {
+      if (view.hasSubmittedCover) return submitted("Cover locked in", "Now pretend this was always your official statement.", view);
+      return `<section class="controller-panel"><p class="eyebrow">${html(view.roundLabel)}</p><h1>${html(view.incident ?? "Explain yourself")}</h1>${motiveCard(view)}<form data-form="cover"><label for="cover">Your one-sentence cover</label><textarea id="cover" name="cover" minlength="3" maxlength="140" rows="4" required placeholder="Obviously, this happened because…">${html(this.draft)}</textarea><div class="form-meta"><span data-count>${this.draft.length}/140</span>${countdown(view.countdownAt)}</div><button class="primary-action" type="submit" ${view.writePending ? "disabled" : ""}>${view.writePending ? "Handing it in…" : "Lock in my cover"}</button></form></section>`;
+    }
+    if (view.phase === "voting") {
+      if (view.hasSubmittedVote) return submitted("Ballot submitted", "Waiting for the class verdict.", view);
+      if (!view.ballot) return submitted("No ballot this round", "You’ll join the next page when it turns.", view);
+      const target = Object.values(view.submissions).find((answer) => answer.id === view.ballot?.decodeAnswerId);
+      if (this.ballotStep === "decode") {
+        return `<section class="controller-panel"><p class="eyebrow">Part one · Decode</p><h1>What motivated this cover?</h1><div class="quote-card">“${html(target?.text ?? "Cover unavailable") }”</div>${countdown(view.countdownAt)}<form data-form="decode"><fieldset><legend>Choose the hidden motive</legend>${view.ballot.angleOptions.map((angle) => radio("angleGuessId", angle.id, angle.label, angle.id === this.ballotAngleGuessId)).join("")}</fieldset><button class="primary-action" type="submit">Continue to favorite</button></form></section>`;
+      }
+      return `<section class="controller-panel"><p class="eyebrow">Part two · Crown</p><h1>Which cover wins the room?</h1>${countdown(view.countdownAt)}<form data-form="ballot"><fieldset><legend>Choose your favorite cover</legend>${view.ballot.favoriteAnswerIds.map((id) => radio("favoriteAnswerId", id, Object.values(view.submissions).find((answer) => answer.id === id)?.text ?? "Cover unavailable", id === this.ballotFavoriteAnswerId)).join("")}</fieldset><input type="hidden" name="decodeAnswerId" value="${html(view.ballot.decodeAnswerId)}"><input type="hidden" name="angleGuessId" value="${html(this.ballotAngleGuessId)}"><button class="primary-action" type="submit" ${view.writePending ? "disabled" : ""}>${view.writePending ? "Submitting…" : "Submit my ballot"}</button><button class="secondary-action" type="button" data-action="back-decode">Back to decode</button></form></section>`;
+    }
+    if (view.phase === "results") {
+      const score = view.scoreboard.find((row) => row.id === view.playerId);
+      const decode = view.personalResult
+        ? `<div class="personal-result"><b>${view.personalResult.correct ? "Correct decode" : "Mystery missed"}</b><span>You guessed “${html(view.personalResult.guessed)}.” ${view.personalResult.correct ? "You read that cover perfectly." : `The motive was “${html(view.personalResult.actual)}.”`}</span><strong>+${view.personalResult.roundPoints} this round</strong></div>`
+        : "";
+      return `<section class="controller-panel"><p class="eyebrow">Permanent record updated</p><h1>${score ? `${score.score} points` : "Results are in"}</h1>${decode}<p class="deck">Favorites are worth 100. Correct decodes are worth 60. Being decoded is worth 40.</p>${scoreRows(view.scoreboard, true)}${countdown(view.countdownAt)}</section>`;
+    }
+    if (view.phase === "finale") return `<section class="controller-panel controller-finale"><p class="eyebrow">Senior superlatives</p><h1>${view.scoreboard[0]?.id === view.playerId ? "Class Legend" : "The class record"}</h1>${scoreRows(view.scoreboard)}${view.isAuthority ? '<button class="primary-action" data-action="lobby">Return everyone to lobby</button><button class="secondary-action" data-action="settings">Room settings</button>' : '<p class="helper">The room director controls what happens next.</p>'}</section>`;
+    return panel(view.title, view.subtitle, countdown(view.countdownAt));
+  }
+
+  private bind(view: ControllerViewModel) {
+    this.root.querySelector<HTMLTextAreaElement>("textarea")?.addEventListener("input", (event) => {
+      this.draft = (event.currentTarget as HTMLTextAreaElement).value;
+      const counter = this.root.querySelector("[data-count]");
+      if (counter) counter.textContent = `${Array.from(this.draft).length}/140`;
+    });
+    for (const input of this.root.querySelectorAll<HTMLInputElement>('input[type="radio"]')) {
+      input.addEventListener("change", () => {
+        if (input.name === "angleGuessId") this.ballotAngleGuessId = input.value;
+        if (input.name === "favoriteAnswerId") this.ballotFavoriteAnswerId = input.value;
+      });
+    }
+    this.root.querySelector("[data-action='ack']")?.addEventListener("click", () => void this.coordinator?.acknowledgeInstructions());
+    this.root.querySelector("[data-action='lobby']")?.addEventListener("click", () => void this.coordinator?.returnToLobby());
+    this.root.querySelector("[data-action='settings']")?.addEventListener("click", () => void this.coordinator?.openSettings());
+    this.root.querySelector("[data-action='back-decode']")?.addEventListener("click", () => {
+      this.ballotStep = "decode";
+      this.render(view);
+    });
+    this.root.querySelector<HTMLFormElement>("[data-form='cover']")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget as HTMLFormElement);
+      void this.coordinator?.submitCover(String(data.get("cover") ?? ""));
+    });
+    this.root.querySelector<HTMLFormElement>("[data-form='ballot']")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget as HTMLFormElement);
+      void this.coordinator?.submitBallot({
+        decodeAnswerId: String(data.get("decodeAnswerId") ?? ""),
+        angleGuessId: String(data.get("angleGuessId") ?? ""),
+        favoriteAnswerId: String(data.get("favoriteAnswerId") ?? "")
+      });
+    });
+    this.root.querySelector<HTMLFormElement>("[data-form='decode']")?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget as HTMLFormElement);
+      this.ballotAngleGuessId = String(data.get("angleGuessId") ?? "");
+      if (!this.ballotAngleGuessId) return;
+      this.ballotStep = "favorite";
+      this.render(view);
+    });
+    if (view.phase !== "writing") this.draft = "";
+    if (view.phase !== "voting" || view.hasSubmittedVote) {
+      this.ballotStep = "decode";
+      this.ballotAngleGuessId = "";
+      this.ballotFavoriteAnswerId = "";
+    }
+  }
+
+  private updateCountdown() {
+    const node = this.root.querySelector<HTMLElement>("[data-deadline]");
+    if (!node) return;
+    node.textContent = `${Math.ceil(Math.max(0, Number(node.dataset.deadline) - Date.now()) / 1000)}s`;
+  }
+}
+
+function panel(title: string, copy: string, detail = ""): string {
+  return `<section class="controller-panel"><p class="eyebrow">Cover Story</p><h1>${html(title)}</h1><p class="deck">${html(copy)}</p>${detail}</section>`;
+}
+
+function motiveCard(view: ControllerViewModel): string {
+  return `<aside class="motive-card"><span>Your private motive</span><strong>${html(view.assignment?.label ?? "Waiting for assignment")}</strong><small>Hint clearly — you score when someone decodes it.</small></aside>`;
+}
+
+function submitted(title: string, copy: string, view: ControllerViewModel): string {
+  return `<section class="controller-panel submitted-panel"><div class="check-seal">✓</div><p class="eyebrow">Submitted</p><h1>${html(title)}</h1><p class="deck">${html(copy)}</p>${countdown(view.countdownAt)}</section>`;
+}
+
+function radio(name: string, value: string, label: string, checked = false): string {
+  return `<label class="choice"><input type="radio" name="${html(name)}" value="${html(value)}" required${checked ? " checked" : ""}><span>${html(label)}</span></label>`;
+}
