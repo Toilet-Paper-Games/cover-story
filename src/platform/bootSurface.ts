@@ -56,6 +56,7 @@ export function bootSurface(
 
   connect(
     bootIframeGame(game, {
+      allowedOrigins: ["*"],
       context: {
         surfaceId,
         surfaceKind,

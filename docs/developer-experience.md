@@ -158,3 +158,19 @@ npm run test:e2e
 - The host and spectator still contain zero focusable or interactive elements.
 - Final reference captures were refreshed at 1440×900, 1280×720, 390×844, and 320×568.
 - Strict directory/archive validation and the production registry dry-run passed again. The redesigned 0.1.0 archive contains the same 12 audited runtime entries and is 1,196,412 bytes.
+
+## 2026-08-23 — publication and production-room verification
+
+### Attempts
+
+- Published `cover-story@0.1.0` through the authenticated Creator Portal and confirmed it appeared as playable in the public production catalog.
+- Opened a fresh production room with three controllers, launched Cover Story from the shell-designated authority controller, and inspected every mounted surface.
+- The first production launch remained in `Preparing room · 0 classmates` even though the shell showed three distinct controllers. Local Workbench and browser journeys could not reproduce the failure.
+
+### Production-only finding and fix
+
+| Scope | Evidence | Resolution and acceptance criteria |
+| --- | --- | --- |
+| Game repository | All 0.1.0 surfaces stayed on their fallback context in production: no roster, lifecycle, or canonical shared-state echo arrived. The sandboxed asset iframe and production shell are cross-origin; `bootIframeGame` had no explicit `allowedOrigins`, while the current public starter uses `allowedOrigins: ["*"]` for this bridge. The visible authority label came from the controller-only local fallback, not shell context. | Added the documented cross-origin bridge setting, bumped the game to 0.1.1, and reran typecheck, 9 unit tests, strict validation, archive inspection, and all 3 browser journeys. Acceptance requires a new production room to receive three controllers, complete submissions/voting/results, and report zero focusable elements inside the host game iframe. |
+
+This is game-specific integration configuration and was fixed in the standalone repository. The broader risk—same-origin Workbench verification does not exercise the production cross-origin/referrer boundary—will be deduplicated against platform issues before filing reusable DX feedback.
