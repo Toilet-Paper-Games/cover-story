@@ -64,16 +64,16 @@ export class ControllerSurfaceRenderer {
     if (view.phase === "round-intro") return `<section class="controller-panel"><p class="eyebrow">${html(view.roundLabel)}</p><h1>${html(view.incident ?? "New incident")}</h1>${motiveCard(view)}<p class="helper">Hint at this motive. Never type its exact words.</p>${countdown(view.countdownAt)}</section>`;
     if (view.phase === "writing") {
       if (view.hasSubmittedCover) return submitted("Cover locked in", "Now pretend this was always your official statement.", view);
-      return `<section class="controller-panel"><p class="eyebrow">${html(view.roundLabel)}</p><h1>${html(view.incident ?? "Explain yourself")}</h1>${motiveCard(view)}<form data-form="cover"><label for="cover">Your one-sentence cover</label><textarea id="cover" name="cover" minlength="3" maxlength="140" rows="4" required placeholder="Obviously, this happened because…">${html(this.draft)}</textarea><div class="form-meta"><span data-count>${this.draft.length}/140</span>${countdown(view.countdownAt)}</div><div class="action-dock"><button class="primary-action" type="button" data-action="submit-cover" ${view.writePending ? "disabled" : ""}>${view.writePending ? "Handing it in…" : "Lock in my cover"}</button></div></form></section>`;
+      return `<section class="controller-panel"><p class="eyebrow">${html(view.roundLabel)}</p><h1>${html(view.incident ?? "Explain yourself")}</h1>${motiveCard(view)}<div data-form="cover"><label for="cover">Your one-sentence cover</label><textarea id="cover" name="cover" minlength="3" maxlength="140" rows="4" required placeholder="Obviously, this happened because…">${html(this.draft)}</textarea><div class="form-meta"><span data-count>${this.draft.length}/140</span>${countdown(view.countdownAt)}</div><div class="action-dock"><button class="primary-action" type="button" data-action="submit-cover" ${view.writePending ? "disabled" : ""}>${view.writePending ? "Handing it in…" : "Lock in my cover"}</button></div></div></section>`;
     }
     if (view.phase === "voting") {
       if (view.hasSubmittedVote) return submitted("Ballot submitted", "Waiting for the class verdict.", view);
       if (!view.ballot) return submitted("No ballot this round", "You’ll join the next page when it turns.", view);
       const target = Object.values(view.submissions).find((answer) => answer.id === view.ballot?.decodeAnswerId);
       if (this.ballotStep === "decode") {
-        return `<section class="controller-panel"><div class="ballot-steps" aria-label="Voting step 1 of 2"><b>1 Decode</b><span>2 Crown</span></div><p class="eyebrow">Read between the lines</p><h1>What motivated this cover?</h1><div class="quote-card"><span aria-hidden="true">“</span><p>${html(target?.text ?? "Cover unavailable")}</p></div>${countdown(view.countdownAt)}<form data-form="decode"><fieldset><legend>Choose the hidden motive</legend>${view.ballot.angleOptions.map((angle) => radio("angleGuessId", angle.id, angle.label, angle.id === this.ballotAngleGuessId)).join("")}</fieldset><div class="action-dock"><button class="primary-action" type="button" data-action="continue-decode">Continue to favorite</button></div></form></section>`;
+        return `<section class="controller-panel"><div class="ballot-steps" aria-label="Voting step 1 of 2"><b>1 Decode</b><span>2 Crown</span></div><p class="eyebrow">Read between the lines</p><h1>What motivated this cover?</h1><div class="quote-card"><span aria-hidden="true">“</span><p>${html(target?.text ?? "Cover unavailable")}</p></div>${countdown(view.countdownAt)}<div data-form="decode"><fieldset><legend>Choose the hidden motive</legend>${view.ballot.angleOptions.map((angle) => radio("angleGuessId", angle.id, angle.label, angle.id === this.ballotAngleGuessId)).join("")}</fieldset><div class="action-dock"><button class="primary-action" type="button" data-action="continue-decode">Continue to favorite</button></div></div></section>`;
       }
-      return `<section class="controller-panel"><div class="ballot-steps" aria-label="Voting step 2 of 2"><span>✓ Decode</span><b>2 Crown</b></div><p class="eyebrow">Pick the room’s headline</p><h1>Which cover wins?</h1>${countdown(view.countdownAt)}<form data-form="ballot"><fieldset><legend>Choose your favorite cover</legend>${view.ballot.favoriteAnswerIds.map((id) => radio("favoriteAnswerId", id, Object.values(view.submissions).find((answer) => answer.id === id)?.text ?? "Cover unavailable", id === this.ballotFavoriteAnswerId)).join("")}</fieldset><input type="hidden" name="decodeAnswerId" value="${html(view.ballot.decodeAnswerId)}"><input type="hidden" name="angleGuessId" value="${html(this.ballotAngleGuessId)}"><div class="action-dock"><button class="primary-action" type="button" data-action="submit-ballot" ${view.writePending ? "disabled" : ""}>${view.writePending ? "Submitting…" : "Submit my ballot"}</button></div><button class="secondary-action" type="button" data-action="back-decode">Change my decode</button></form></section>`;
+      return `<section class="controller-panel"><div class="ballot-steps" aria-label="Voting step 2 of 2"><span>✓ Decode</span><b>2 Crown</b></div><p class="eyebrow">Pick the room’s headline</p><h1>Which cover wins?</h1>${countdown(view.countdownAt)}<div data-form="ballot"><fieldset><legend>Choose your favorite cover</legend>${view.ballot.favoriteAnswerIds.map((id) => radio("favoriteAnswerId", id, Object.values(view.submissions).find((answer) => answer.id === id)?.text ?? "Cover unavailable", id === this.ballotFavoriteAnswerId)).join("")}</fieldset><div class="action-dock"><button class="primary-action" type="button" data-action="submit-ballot" ${view.writePending ? "disabled" : ""}>${view.writePending ? "Submitting…" : "Submit my ballot"}</button></div><button class="secondary-action" type="button" data-action="back-decode">Change my decode</button></div></section>`;
     }
     if (view.phase === "results") {
       const score = view.scoreboard.find((row) => row.id === view.playerId);
@@ -105,31 +105,24 @@ export class ControllerSurfaceRenderer {
       this.ballotStep = "decode";
       this.render(view);
     });
-    const coverForm = this.root.querySelector<HTMLFormElement>("[data-form='cover']");
     const submitCover = () => {
-      if (!coverForm?.reportValidity()) return;
-      const data = new FormData(coverForm);
-      void this.coordinator?.submitCover(String(data.get("cover") ?? ""));
+      const value = this.root.querySelector<HTMLTextAreaElement>("textarea[name='cover']")?.value ?? "";
+      if (Array.from(value.trim()).length < 3 || Array.from(value).length > 140) return;
+      void this.coordinator?.submitCover(value);
     };
     this.root.querySelector("[data-action='submit-cover']")?.addEventListener("click", submitCover);
 
-    const ballotForm = this.root.querySelector<HTMLFormElement>("[data-form='ballot']");
     const submitBallot = () => {
-      if (!ballotForm?.reportValidity()) return;
-      const data = new FormData(ballotForm);
+      if (!view.ballot || !this.ballotAngleGuessId || !this.ballotFavoriteAnswerId) return;
       void this.coordinator?.submitBallot({
-        decodeAnswerId: String(data.get("decodeAnswerId") ?? ""),
-        angleGuessId: String(data.get("angleGuessId") ?? ""),
-        favoriteAnswerId: String(data.get("favoriteAnswerId") ?? "")
+        decodeAnswerId: view.ballot.decodeAnswerId,
+        angleGuessId: this.ballotAngleGuessId,
+        favoriteAnswerId: this.ballotFavoriteAnswerId
       });
     };
     this.root.querySelector("[data-action='submit-ballot']")?.addEventListener("click", submitBallot);
 
-    const decodeForm = this.root.querySelector<HTMLFormElement>("[data-form='decode']");
     const continueDecode = () => {
-      if (!decodeForm?.reportValidity()) return;
-      const data = new FormData(decodeForm);
-      this.ballotAngleGuessId = String(data.get("angleGuessId") ?? "");
       if (!this.ballotAngleGuessId) return;
       this.ballotStep = "favorite";
       this.render(view);

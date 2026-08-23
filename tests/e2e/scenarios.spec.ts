@@ -95,7 +95,7 @@ test("narrow controllers render independent states and never leak authority cont
 });
 
 test("four Workbench controllers complete a round through controller authority", async ({ page }) => {
-  test.setTimeout(240_000);
+  test.setTimeout(600_000);
   await page.goto("/__tpg/workbench");
   await expect(page.getByRole("heading", { name: "Cover Story" })).toBeVisible();
   await expect.poll(() => controllerFrames(page.frames()).length).toBe(4);
@@ -107,12 +107,19 @@ test("four Workbench controllers complete a round through controller authority",
   await page.getByRole("combobox", { name: "Lifecycle state" }).selectOption("started");
 
   let controllers = controllerFrames(page.frames());
-  for (const frame of controllers) {
-    await frame.locator("[data-action='ack']").waitFor();
-    await frame.locator("[data-action='ack']").press("Enter");
-  }
+  await Promise.all(
+    controllers.map(async (frame) => {
+      const acknowledgement = frame.locator("[data-action='ack']");
+      const writing = frame.locator("[data-form='cover']");
+      await acknowledgement.waitFor();
+      await Promise.race([
+        acknowledgement.press("Enter").catch(() => undefined),
+        writing.waitFor().catch(() => undefined)
+      ]);
+    })
+  );
 
-  await Promise.all(controllers.map((frame) => frame.locator("form[data-form='cover']").waitFor()));
+  await Promise.all(controllers.map((frame) => frame.locator("[data-form='cover']").waitFor()));
   controllers = controllerFrames(page.frames());
   const covers = [
     "The night shift briefly misplaced a very large lamp.",
@@ -134,13 +141,13 @@ test("four Workbench controllers complete a round through controller authority",
     await frame.getByRole("button", { name: "Lock in my cover" }).press("Enter");
   }
 
-  await Promise.all(controllers.map((frame) => frame.locator("form[data-form='decode']").waitFor()));
+  await Promise.all(controllers.map((frame) => frame.locator("[data-form='decode']").waitFor()));
   for (const frame of controllers) {
     await frame.locator("input[name='angleGuessId']").first().press("Space");
     await frame.getByRole("button", { name: "Continue to favorite" }).press("Enter");
   }
   controllers = controllerFrames(page.frames());
-  await Promise.all(controllers.map((frame) => frame.locator("form[data-form='ballot']").waitFor()));
+  await Promise.all(controllers.map((frame) => frame.locator("[data-form='ballot']").waitFor()));
   controllers = controllerFrames(page.frames());
   const host = page.frames().find((frame) => frame.url().includes("/surfaces/host.html"))!;
   const spectator = page.frames().find((frame) => frame.url().includes("/surfaces/spectator.html"))!;

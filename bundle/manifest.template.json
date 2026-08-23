@@ -1,7 +1,7 @@
 {
   "manifestVersion": "1",
   "gameId": "cover-story",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "sdkVersion": "1.0.0",
   "title": "Cover Story",
   "description": "Explain an impossible public incident, decode the private motives behind suspicious alibis, and crown the room's favorite cover story.",
