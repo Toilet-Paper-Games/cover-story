@@ -1,7 +1,10 @@
 import { chromium } from "@playwright/test";
+import { readFileSync } from "node:fs";
 
 const productionUrl = process.env.TPG_PRODUCTION_URL ?? "https://play.tp.games/";
-const expectedVersion = process.env.TPG_EXPECTED_VERSION ?? "0.1.6";
+const projectVersion = JSON.parse(readFileSync(new URL("../tpgames.json", import.meta.url), "utf8"))
+  .game.version;
+const expectedVersion = process.env.TPG_EXPECTED_VERSION ?? projectVersion;
 const focusableSelector =
   'button,a[href],input,select,textarea,summary,[contenteditable="true"],[tabindex]:not([tabindex="-1"]),audio[controls],video[controls]';
 
@@ -59,9 +62,7 @@ try {
 
   const controllerFrames = controllers.map((page) => page.frameLocator("iframe"));
   const hostFrame = host.frameLocator("iframe");
-  await hostFrame.getByRole("heading", { name: "Make the unbelievable sound reasonable" }).waitFor({
-    timeout: 20_000
-  });
+  await hostFrame.locator(".evidence-wheel").waitFor({ timeout: 20_000 });
 
   const controllerAssetUrl = await controllers[0].locator("iframe").getAttribute("src");
   const hostAssetUrl = await host.locator("iframe").getAttribute("src");
@@ -81,7 +82,7 @@ try {
   }
 
   for (const frame of controllerFrames) {
-    await frame.getByRole("button", { name: "I’m ready" }).tap();
+    await frame.locator("[data-action='ack']").tap();
   }
 
   const covers = [
@@ -94,14 +95,12 @@ try {
     const textbox = frame.getByRole("textbox", { name: "Your one-sentence cover" });
     await textbox.waitFor({ timeout: 25_000 });
     await textbox.fill(covers[index]);
-    const submitCover = frame.getByRole("button", { name: "Lock in my cover" });
-    await submitCover.press("Enter");
+    const submitCover = frame.locator("[data-action='submit-cover']");
+    await submitCover.tap();
     try {
       await Promise.race([
         frame.getByRole("heading", { name: "Cover locked in" }).waitFor({ timeout: 10_000 }),
-        frame
-          .getByRole("heading", { name: "What motivated this cover?" })
-          .waitFor({ timeout: 10_000 })
+        frame.locator("[data-form='decode']").waitFor({ timeout: 10_000 })
       ]);
     } catch {
       const controllerState = (await frame.locator("main").innerText()).replace(/\s+/g, " ").trim();
@@ -109,19 +108,17 @@ try {
     }
   }
 
-  await controllerFrames[0]
-    .getByRole("heading", { name: "What motivated this cover?" })
-    .waitFor({ timeout: 20_000 });
+  await controllerFrames[0].locator("[data-form='decode']").waitFor({ timeout: 20_000 });
 
   for (const frame of controllerFrames) {
-    await frame.getByRole("heading", { name: "What motivated this cover?" }).waitFor();
+    await frame.locator("[data-form='decode']").waitFor();
     await frame.getByRole("radio").first().check();
-    await frame.getByRole("button", { name: "Continue to favorite" }).press("Enter");
+    await frame.locator("[data-action='continue-decode']").tap();
     await frame.getByRole("radio").first().check();
-    await frame.getByRole("button", { name: "Submit my ballot" }).press("Enter");
+    await frame.locator("[data-action='submit-ballot']").tap();
   }
 
-  await hostFrame.getByRole("heading", { name: "The truth comes out" }).waitFor({ timeout: 20_000 });
+  await hostFrame.locator(".results-stage").waitFor({ timeout: 20_000 });
   const hostFocusableCount = await hostFrame.locator(focusableSelector).count();
   if (hostFocusableCount !== 0) {
     throw new Error(`Passive host contract failed with ${hostFocusableCount} focusable elements.`);
@@ -129,7 +126,8 @@ try {
 
   const controllerResults = [];
   for (const frame of controllerFrames) {
-    await frame.getByText("Permanent record updated", { exact: true }).waitFor();
+    await frame.locator(".personal-result").waitFor();
+    await frame.getByText(/this round/).waitFor();
     controllerResults.push((await frame.locator("main").innerText()).replace(/\s+/g, " ").trim());
   }
 

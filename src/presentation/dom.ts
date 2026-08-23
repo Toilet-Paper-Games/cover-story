@@ -4,6 +4,10 @@ import type { PublicViewModel, ScoreRow } from "./viewModels";
 
 export const html = escapeHtml;
 
+export function surfaceAssetPath(fileName: string, pathname = window.location.pathname): string {
+  return pathname.includes("/surfaces/") ? `/assets/${fileName}` : `./assets/${fileName}`;
+}
+
 export function statusStrip(view: PublicViewModel): string {
   const disconnected = view.players.filter((player) => !player.connected).length;
   return `<div class="status-strip" aria-label="Room status">

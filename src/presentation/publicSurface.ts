@@ -1,8 +1,9 @@
 import type { GameCoordinator } from "../application/coordinator";
-import { countdown, html, progressDots, scoreRows, statusStrip } from "./dom";
+import { countdown, html, progressDots, scoreRows, statusStrip, surfaceAssetPath } from "./dom";
 import { buildPublicViewModel, type PublicViewModel } from "./viewModels";
 
-const logoUrl = "/assets/cover-story-logo.png";
+const logoUrl = surfaceAssetPath("cover-story-logo.png");
+const stageTextureUrl = surfaceAssetPath("comic-stage-texture.png");
 
 export class PublicSurfaceRenderer {
   private unsubscribe?: () => void;
@@ -39,7 +40,7 @@ export class PublicSurfaceRenderer {
       this.resultsRound = 0;
     }
     this.root.innerHTML = `<main class="public-surface phase-${view.phase}">
-      <div class="stage-texture" style="background-image:url('/assets/comic-stage-texture.png')" aria-hidden="true"></div>
+      <div class="stage-texture" style="background-image:url('${stageTextureUrl}')" aria-hidden="true"></div>
       ${showDecor(view)}
       <header class="broadcast-header">
         <img class="game-logo" src="${logoUrl}" alt="" />

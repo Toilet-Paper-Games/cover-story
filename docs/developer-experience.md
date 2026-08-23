@@ -218,3 +218,9 @@ The Penpot connection is local tooling evidence and does not justify a TP Games 
 ### Production-only findings
 
 None in the redesign itself. Publication and a fresh-room playthrough of version `0.2.0` are recorded after the release gates and production verification complete.
+
+### Production follow-up
+
+Version `0.2.0` completed a functional fresh-room round in `UQDQAP`: three isolated mobile controllers submitted three covers and three ballots, all scored, all received personal results, authority controls were `[1, 0, 0]`, and the host contained zero focusable elements. The screenshot nevertheless showed the production logo and stage texture missing. Local development and Workbench served surfaces from the origin root, masking that `src="/assets/..."` and `url('/assets/...')` escaped the registry's versioned asset base in production.
+
+The game fix changes runtime artwork references to `./assets/...` so they resolve beside `host.html` and `controller.html` under every versioned registry path. Acceptance for `0.2.1` is a new full production round plus visual confirmation that the exact registry-hosted logo and texture render on the passive host result screen. This is closely related to the asset-linking and published-subpath concern already recorded in platform issue [#939](https://github.com/Toilet-Paper-Games/Toilet-Paper-Games/issues/939); no duplicate issue was filed.

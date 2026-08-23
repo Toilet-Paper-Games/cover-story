@@ -1,5 +1,5 @@
 import type { GameCoordinator } from "../application/coordinator";
-import { countdown, html, scoreRows, statusStrip } from "./dom";
+import { countdown, html, scoreRows, statusStrip, surfaceAssetPath } from "./dom";
 import { buildControllerViewModel, type ControllerViewModel } from "./viewModels";
 
 export class ControllerSurfaceRenderer {
@@ -35,8 +35,8 @@ export class ControllerSurfaceRenderer {
     const favoriteChoice = this.root.querySelector<HTMLInputElement>('input[name="favoriteAnswerId"]:checked');
     if (angleChoice) this.ballotAngleGuessId = angleChoice.value;
     if (favoriteChoice) this.ballotFavoriteAnswerId = favoriteChoice.value;
-    this.root.innerHTML = `<main class="controller-surface phase-${view.phase} player-count-${view.players.length}" style="background-image:url('/assets/comic-stage-texture.png')">
-      <header class="controller-header"><span class="player-avatar" aria-hidden="true">${html(view.playerName.slice(0, 1).toUpperCase())}</span><div><p class="player-label">${html(view.playerName)}</p><img class="controller-logo" src="/assets/cover-story-logo.png" alt="Cover Story" /></div>${view.isAuthority ? '<span class="authority-badge">Room director</span>' : ""}</header>
+    this.root.innerHTML = `<main class="controller-surface phase-${view.phase} player-count-${view.players.length}" style="background-image:url('${surfaceAssetPath("comic-stage-texture.png")}')">
+      <header class="controller-header"><span class="player-avatar" aria-hidden="true">${html(view.playerName.slice(0, 1).toUpperCase())}</span><div><p class="player-label">${html(view.playerName)}</p><img class="controller-logo" src="${surfaceAssetPath("cover-story-logo.png")}" alt="Cover Story" /></div>${view.isAuthority ? '<span class="authority-badge">Room director</span>' : ""}</header>
       ${phaseTrack(view)}
       ${statusStrip(view)}
       ${view.isReconnecting ? '<div class="notice notice--reconnect"><b>Reconnecting</b><span>Your confirmed answers are safe. This page will catch up automatically.</span></div>' : ""}
